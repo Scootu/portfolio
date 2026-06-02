@@ -1,5 +1,6 @@
 import React from 'react';
 import { Terminal, Database, Cpu } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export const Services: React.FC = () => {
   const serviceList = [
@@ -37,7 +38,12 @@ export const Services: React.FC = () => {
 
           <div className="services-grid grid-3">
             {serviceList.map((service) => (
-              <div key={service.num} className="service-card">
+              <motion.div
+                key={service.num}
+                className="service-card"
+                whileHover={{ y: -6, scale: 1.015 }}
+                transition={{ type: 'spring', stiffness: 360, damping: 28 }}
+              >
                 <div className="service-card-top">
                   <span className="service-num font-mono">{service.num}</span>
                   <div className="service-icon-box">{service.icon}</div>
@@ -46,7 +52,7 @@ export const Services: React.FC = () => {
                   <h3 className="service-card-title">{service.title}</h3>
                   <p className="service-card-desc">{service.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -74,8 +80,23 @@ export const Services: React.FC = () => {
         .service-card:hover {
           border-color: var(--color-blue);
           background: var(--color-bg-tertiary-hover);
-          transform: translateY(-2px);
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .service-card:hover .service-icon-box svg {
+          animation: service-icon-pulse 0.8s ease-in-out;
+        }
+
+        .service-card:nth-child(1):hover .service-icon-box svg {
+          animation: service-icon-rotate 1s ease-in-out;
+        }
+
+        .service-card:nth-child(2):hover .service-icon-box svg {
+          animation: service-icon-shift 0.7s ease-in-out;
+        }
+
+        .service-card:nth-child(3):hover .service-icon-box svg {
+          animation: service-icon-pulse 0.8s ease-in-out;
         }
 
         .service-card-top {
@@ -113,6 +134,22 @@ export const Services: React.FC = () => {
           font-size: 13.5px;
           line-height: 1.6;
           color: var(--color-text-secondary);
+        }
+
+        @keyframes service-icon-rotate {
+          0% { transform: rotate(0deg); }
+          70% { transform: rotate(14deg); }
+          100% { transform: rotate(0deg); }
+        }
+
+        @keyframes service-icon-shift {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(3px); }
+        }
+
+        @keyframes service-icon-pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.16); }
         }
       `}</style>
     </>

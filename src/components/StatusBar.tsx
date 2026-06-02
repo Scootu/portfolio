@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Wifi } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface StatusBarProps {
   activeSection: string;
@@ -40,14 +41,6 @@ export const StatusBar: React.FC<StatusBarProps> = ({ activeSection }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Format scroll progress visual bar
-  const renderProgressBar = () => {
-    const barsCount = 8;
-    const filledCount = Math.round((scrollProgress / 100) * barsCount);
-    const bars = '='.repeat(filledCount) + ' '.repeat(barsCount - filledCount);
-    return `[${bars}] ${scrollProgress}%`;
-  };
-
   return (
     <>
       <div className="status-bar" id="status-bar">
@@ -79,7 +72,14 @@ export const StatusBar: React.FC<StatusBarProps> = ({ activeSection }) => {
           </div>
 
           <div className="status-bar__segment status-bar__progress">
-            <span className="status-bar__progress-visual">{renderProgressBar()}</span>
+            <span className="status-bar__progress-track" aria-hidden="true">
+              <motion.span
+                className="status-bar__progress-fill"
+                animate={{ width: `${scrollProgress}%` }}
+                transition={{ type: 'spring', stiffness: 170, damping: 24, mass: 0.6 }}
+              />
+            </span>
+            <span className="status-bar__progress-visual">{scrollProgress}%</span>
           </div>
 
           <div className="status-bar__segment status-bar__time">
@@ -178,7 +178,6 @@ export const StatusBar: React.FC<StatusBarProps> = ({ activeSection }) => {
           max-width: 320px;
           overflow: hidden;
           white-space: nowrap;
-          text-overflow: ellipsis;
         }
 
         .status-bar__np-icon {
@@ -187,12 +186,29 @@ export const StatusBar: React.FC<StatusBarProps> = ({ activeSection }) => {
         }
 
         .status-bar__np-value {
-          overflow: hidden;
-          text-overflow: ellipsis;
+          display: inline-block;
+          min-width: max-content;
+          animation: status-marquee 16s linear infinite;
         }
 
         .status-bar__progress {
           min-width: 140px;
+        }
+
+        .status-bar__progress-track {
+          position: relative;
+          width: 74px;
+          height: 4px;
+          overflow: hidden;
+          border: 1px solid var(--color-border);
+          background: var(--color-border-subtle);
+        }
+
+        .status-bar__progress-fill {
+          position: absolute;
+          inset: 0 auto 0 0;
+          background: linear-gradient(90deg, var(--color-orange), var(--color-blue));
+          box-shadow: 0 0 12px color-mix(in srgb, var(--color-blue) 60%, transparent);
         }
 
         .status-bar__time {
@@ -213,6 +229,11 @@ export const StatusBar: React.FC<StatusBarProps> = ({ activeSection }) => {
 
         @keyframes spin {
           100% { transform: rotate(360deg); }
+        }
+
+        @keyframes status-marquee {
+          0%, 20% { transform: translateX(0); }
+          80%, 100% { transform: translateX(calc(-100% + 250px)); }
         }
 
         @media (max-width: 900px) {

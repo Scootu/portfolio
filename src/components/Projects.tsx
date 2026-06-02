@@ -1,9 +1,23 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, type Variants } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, type Variants } from 'framer-motion';
+
+type ProjectItem = {
+  year: string;
+  role: string;
+  title: string;
+  desc: string;
+  tags: string[];
+  accent: string;
+  windowTitle: string;
+  screen: string;
+  image?: string;
+  imageAlt?: string;
+  href: string;
+};
 
 export const Projects: React.FC = () => {
-  const projects = [
+  const projects: ProjectItem[] = [
     {
       year: '2026',
       role: 'Full-Stack Developer',
@@ -76,46 +90,7 @@ export const Projects: React.FC = () => {
           viewport={{ once: true, margin: '-100px' }}
         >
           {projects.map((project) => (
-            <motion.article
-              className={`work-card work-card--${project.accent}`}
-              key={project.title}
-              variants={itemVariants}
-              whileHover={{ y: -8 }}
-            >
-              <div className="work-preview">
-                <div className={`browser-window ${project.image ? 'browser-window--image' : ''}`}>
-                  <div className="browser-bar">
-                    <span className="dot dot--red" />
-                    <span className="dot dot--yellow" />
-                    <span className="dot dot--green" />
-                    <span className="browser-title font-mono">{project.windowTitle}</span>
-                  </div>
-                  <ProjectScreen type={project.screen} image={project.image} imageAlt={project.imageAlt} />
-                </div>
-              </div>
-
-              <div className="work-card-body">
-                <div className="work-meta font-mono">
-                  <span>{project.year}</span>
-                  <span>{project.role}</span>
-                </div>
-                <h3>{project.title}</h3>
-                <p>{project.desc}</p>
-                <div className="work-tags">
-                  {project.tags.map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-                <a
-                  className="work-link font-mono"
-                  href={project.href}
-                  target={project.href.startsWith('http') ? '_blank' : undefined}
-                  rel={project.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                >
-                  View case study <ArrowUpRight size={13} />
-                </a>
-              </div>
-            </motion.article>
+            <ProjectCard key={project.title} project={project} variants={itemVariants} />
           ))}
         </motion.div>
 
@@ -171,6 +146,7 @@ export const Projects: React.FC = () => {
           border: 1px solid var(--color-border);
           background: color-mix(in srgb, var(--color-bg-primary) 84%, transparent);
           transition: border-color var(--motion-medium) var(--ease-standard), box-shadow var(--motion-medium) var(--ease-standard);
+          transform-style: preserve-3d;
         }
 
         .work-card:hover {
@@ -193,6 +169,7 @@ export const Projects: React.FC = () => {
             linear-gradient(var(--color-border-subtle) 1px, transparent 1px),
             var(--color-bg-tertiary);
           background-size: 38px 38px;
+          perspective: 900px;
         }
 
         .browser-window {
@@ -204,6 +181,7 @@ export const Projects: React.FC = () => {
           overflow: hidden;
           transform: rotate(-1deg);
           transition: transform var(--motion-medium) var(--ease-standard);
+          will-change: transform;
         }
 
         .browser-window--image {
@@ -212,7 +190,7 @@ export const Projects: React.FC = () => {
         }
 
         .work-card:hover .browser-window {
-          transform: rotate(0deg) scale(1.03);
+          transform: scale(1.03);
         }
 
         .browser-bar {
@@ -264,6 +242,12 @@ export const Projects: React.FC = () => {
           display: block;
           object-fit: cover;
           object-position: 32% 45%;
+          animation: screenshot-breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes screenshot-breathe {
+          0%, 100% { transform: scale(1); filter: saturate(1); }
+          50% { transform: scale(1.035); filter: saturate(1.08); }
         }
 
         .screen-grid {
@@ -426,6 +410,73 @@ export const Projects: React.FC = () => {
         }
       `}</style>
     </section>
+  );
+};
+
+const ProjectCard: React.FC<{ project: ProjectItem; variants: Variants }> = ({ project, variants }) => {
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const smoothX = useSpring(pointerX, { stiffness: 180, damping: 22 });
+  const smoothY = useSpring(pointerY, { stiffness: 180, damping: 22 });
+  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-8, 8]);
+  const rotateX = useTransform(smoothY, [-0.5, 0.5], [7, -7]);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerX.set((event.clientX - rect.left) / rect.width - 0.5);
+    pointerY.set((event.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const resetTilt = () => {
+    pointerX.set(0);
+    pointerY.set(0);
+  };
+
+  return (
+    <motion.article
+      className={`work-card work-card--${project.accent}`}
+      variants={variants}
+      whileHover={{ y: -8 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={resetTilt}
+    >
+      <div className="work-preview">
+        <motion.div
+          className={`browser-window ${project.image ? 'browser-window--image' : ''}`}
+          style={{ rotateX, rotateY }}
+        >
+          <div className="browser-bar">
+            <span className="dot dot--red" />
+            <span className="dot dot--yellow" />
+            <span className="dot dot--green" />
+            <span className="browser-title font-mono">{project.windowTitle}</span>
+          </div>
+          <ProjectScreen type={project.screen} image={project.image} imageAlt={project.imageAlt} />
+        </motion.div>
+      </div>
+
+      <div className="work-card-body">
+        <div className="work-meta font-mono">
+          <span>{project.year}</span>
+          <span>{project.role}</span>
+        </div>
+        <h3>{project.title}</h3>
+        <p>{project.desc}</p>
+        <div className="work-tags">
+          {project.tags.map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
+        </div>
+        <a
+          className="work-link font-mono"
+          href={project.href}
+          target={project.href.startsWith('http') ? '_blank' : undefined}
+          rel={project.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          View case study <ArrowUpRight size={13} />
+        </a>
+      </div>
+    </motion.article>
   );
 };
 

@@ -32,6 +32,12 @@ function App() {
   const isMechanicShopPage = currentPath === '/projects/mechanic-shop';
   const isContactPage = currentPath === '/contact';
 
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   // Dark Mode Sync
   useEffect(() => {
     const root = document.documentElement;
@@ -55,6 +61,31 @@ function App() {
       window.removeEventListener('portfolio:navigation', handlePathChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (isDemAiPage || isMechanicShopPage || isContactPage) return;
+
+    const scrollToHash = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (!hash || hash === 'home') {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        setActiveSection('home');
+        return;
+      }
+
+      const element = document.getElementById(hash);
+      if (!element) return;
+
+      const offset = 80;
+      const top = element.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'auto' });
+      setActiveSection(hash);
+    };
+
+    window.setTimeout(scrollToHash, 0);
+    window.addEventListener('hashchange', scrollToHash);
+    return () => window.removeEventListener('hashchange', scrollToHash);
+  }, [currentPath, isContactPage, isDemAiPage, isMechanicShopPage]);
 
   // Scroll Spy Implementation
   useEffect(() => {

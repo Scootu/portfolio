@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
 export const About: React.FC = () => {
   const stats = [
-    { value: '3+', label: 'full-stack systems', detail: 'healthcare, workflow, portfolio' },
-    { value: '8+', label: 'core technologies', detail: '.NET, React, SQL, Docker' },
-    { value: '90%', label: 'backend focus', detail: 'architecture and data flow' },
-    { value: '2026', label: 'computer science', detail: 'B.Sc. graduation track' }
+    { value: 3, suffix: '+', label: 'full-stack systems', detail: 'healthcare, workflow, portfolio' },
+    { value: 8, suffix: '+', label: 'core technologies', detail: '.NET, React, SQL, Docker' },
+    { value: 90, suffix: '%', label: 'backend focus', detail: 'architecture and data flow' },
+    { value: 2026, suffix: '', label: 'computer science', detail: 'B.Sc. graduation track' }
   ];
 
   return (
@@ -26,11 +26,7 @@ export const About: React.FC = () => {
 
           <div className="about-stats">
             {stats.map((stat) => (
-              <div className="about-stat" key={stat.label}>
-                <strong>{stat.value}</strong>
-                <span>{stat.label}</span>
-                <small>{stat.detail}</small>
-              </div>
+              <CountUpStat key={stat.label} {...stat} />
             ))}
           </div>
         </div>
@@ -79,6 +75,7 @@ export const About: React.FC = () => {
           border: 1px solid var(--color-text-primary);
           border-radius: 50%;
           transform: translateX(-50%);
+          animation: about-orbit-rotate 7s linear infinite;
         }
 
         .about-orbit::after {
@@ -91,6 +88,19 @@ export const About: React.FC = () => {
           border-radius: 50%;
           background: var(--color-text-primary);
           transform: translate(-50%, -50%);
+        }
+
+        .about-orbit::before {
+          content: "";
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          left: 50%;
+          top: -3px;
+          border-radius: 50%;
+          background: var(--color-blue);
+          box-shadow: 0 0 12px var(--color-blue);
+          transform: translateX(-50%);
         }
 
         .about-copy {
@@ -158,6 +168,12 @@ export const About: React.FC = () => {
           color: var(--color-text-primary);
           font-size: clamp(36px, 3.2vw, 54px);
           line-height: 1;
+          font-variant-numeric: tabular-nums;
+        }
+
+        @keyframes about-orbit-rotate {
+          from { transform: translateX(-50%) rotate(0deg); }
+          to { transform: translateX(-50%) rotate(360deg); }
         }
 
         .about-stat span,
@@ -202,5 +218,45 @@ export const About: React.FC = () => {
         }
       `}</style>
     </section>
+  );
+};
+
+const CountUpStat: React.FC<{ value: number; suffix: string; label: string; detail: string }> = ({ value, suffix, label, detail }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        const start = performance.now();
+        const duration = 1100;
+        const step = (now: number) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setDisplay(Math.round(value * eased));
+          if (progress < 1) requestAnimationFrame(step);
+        };
+
+        requestAnimationFrame(step);
+        observer.disconnect();
+      },
+      { threshold: 0.35 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [value]);
+
+  return (
+    <div className="about-stat" ref={ref}>
+      <strong>{display}{suffix}</strong>
+      <span>{label}</span>
+      <small>{detail}</small>
+    </div>
   );
 };

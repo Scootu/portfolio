@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronRight, CornerDownLeft, RefreshCw } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface LogEntry {
   type: 'input' | 'output' | 'error' | 'success';
@@ -146,7 +147,13 @@ export const Terminal: React.FC = () => {
             <div className="header-meta font-mono">cli_simulation.exe</div>
           </div>
 
-          <div className="terminal-wrapper">
+          <motion.div
+            className="terminal-wrapper"
+            initial={{ opacity: 0, y: 34 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
             {/* Quick Actions Panel */}
             <div className="terminal-actions">
               <span className="terminal-actions-lbl">QUICK BUTTONS //</span>
@@ -201,9 +208,15 @@ export const Terminal: React.FC = () => {
               <div className="terminal-window-body">
                 <div className="terminal-logs">
                   {history.map((entry, idx) => (
-                    <div key={idx} className={`terminal-log-row log-${entry.type}`}>
+                    <motion.div
+                      key={`${idx}-${entry.text}`}
+                      className={`terminal-log-row log-${entry.type}`}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.22, delay: Math.min(idx * 0.05, 0.35) }}
+                    >
                       {entry.text}
-                    </div>
+                    </motion.div>
                   ))}
                   <div ref={terminalEndRef} />
                 </div>
@@ -231,7 +244,7 @@ export const Terminal: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 

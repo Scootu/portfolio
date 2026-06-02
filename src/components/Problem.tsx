@@ -29,7 +29,16 @@ export const Problem: React.FC = () => {
     <section className="section-box problem-section" id="problem">
       <div className="problem-matrix" aria-hidden="true">
         {Array.from({ length: 26 }).map((_, i) => (
-          <span key={i} style={{ '--i': i } as React.CSSProperties}>{i % 3 === 0 ? '*' : (i % 4) + 1}</span>
+          <span
+            key={i}
+            style={{
+              '--i': i,
+              '--d': `${(i * 137) % 19 / 10}s`,
+              '--dur': `${7 + (i % 5)}s`
+            } as React.CSSProperties}
+          >
+            {i % 3 === 0 ? '*' : (i % 4) + 1}
+          </span>
         ))}
       </div>
 
@@ -152,6 +161,22 @@ export const Problem: React.FC = () => {
 
         .problem-matrix span {
           transform: translateY(calc((var(--i) % 5) * 18px));
+          animation: matrix-drift var(--dur) ease-in-out infinite;
+          animation-delay: var(--d);
+        }
+
+        @keyframes matrix-drift {
+          0%, 100% {
+            opacity: 0.34;
+            transform: translate3d(0, calc((var(--i) % 5) * 18px), 0);
+          }
+          45% {
+            opacity: 0.12;
+            transform: translate3d(calc(((var(--i) % 3) - 1) * 10px), calc((var(--i) % 5) * 18px - 16px), 0);
+          }
+          52% {
+            opacity: 0.48;
+          }
         }
 
         @media (max-width: 1000px) {

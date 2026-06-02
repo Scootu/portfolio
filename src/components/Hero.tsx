@@ -1,7 +1,24 @@
 import React from 'react';
 import { Download, Terminal as TerminalIcon, ArrowRight } from 'lucide-react';
+import { motion, type Variants } from 'framer-motion';
 
 export const Hero: React.FC = () => {
+  const contentVariants: Variants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.09, delayChildren: 0.12 }
+    }
+  };
+
+  const revealVariants: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.58, ease: [0.22, 1, 0.36, 1] }
+    }
+  };
+
   const techStack = [
     { label: 'C#', type: 'backend' },
     { label: 'ASP.NET Core', type: 'backend' },
@@ -36,28 +53,33 @@ export const Hero: React.FC = () => {
       <section className="hero-section" id="home">
         <div className="hero-container container">
           <div className="hero-grid">
-            <div className="hero-content">
-              <div className="hero-eyebrow">
+            <motion.div
+              className="hero-content"
+              variants={contentVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div className="hero-eyebrow" variants={revealVariants}>
                 <span className="badge-pill badge-pill--orange">
                   <span className="eyebrow-dot"></span> AVAILABLE FOR OPPORTUNITIES
                 </span>
-              </div>
+              </motion.div>
 
-              <h1 className="hero-title">
+              <motion.h1 className="hero-title" variants={revealVariants}>
                 Anes Hamdaoui
-              </h1>
+              </motion.h1>
 
-              <h2 className="hero-subtitle">
+              <motion.h2 className="hero-subtitle" variants={revealVariants}>
                 Full Stack Developer <span className="subtitle-sep">//</span> Building Systems that Scale
-              </h2>
+              </motion.h2>
 
-              <p className="hero-description">
+              <motion.p className="hero-description" variants={revealVariants}>
                 I am a Full Stack Developer specializing in robust backend architectures using <strong>C#</strong>, <strong>ASP.NET Core</strong>, 
                 and <strong>Clean Architecture</strong> combined with responsive frontends built in <strong>React</strong> and <strong>TypeScript</strong>. 
                 I focus on writing clean, maintainable systems, optimization, and solving complex engineering challenges.
-              </p>
+              </motion.p>
 
-              <div className="hero-actions">
+              <motion.div className="hero-actions" variants={revealVariants}>
                 <a 
                   href="/Anes-hamdaoui-1.pdf" 
                   download="Anes-Hamdaoui-CV.pdf"
@@ -71,9 +93,9 @@ export const Hero: React.FC = () => {
                 >
                   <TerminalIcon size={14} /> Run Terminal <ArrowRight size={12} className="btn-arrow" />
                 </button>
-              </div>
+              </motion.div>
 
-              <div className="hero-tech-container">
+              <motion.div className="hero-tech-container" variants={revealVariants}>
                 <span className="tech-label">CORE STACK //</span>
                 <div className="tech-pills">
                   {techStack.map((tech) => (
@@ -88,10 +110,15 @@ export const Hero: React.FC = () => {
                     </span>
                   ))}
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="hero-visual">
+            <motion.div
+              className="hero-visual"
+              initial={{ opacity: 0, y: 30, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
               <div className="visual-grid-overlay"></div>
               <div className="visual-card">
                 <div className="visual-card-header">
@@ -127,7 +154,7 @@ export const Hero: React.FC = () => {
                   </pre>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -260,6 +287,7 @@ export const Hero: React.FC = () => {
           opacity: 0.35;
           z-index: 1;
           pointer-events: none;
+          animation: dot-drift 18s linear infinite;
         }
 
         .visual-card {
@@ -272,6 +300,7 @@ export const Hero: React.FC = () => {
           overflow: hidden;
           z-index: 2;
           position: relative;
+          animation: visual-float 6s ease-in-out infinite;
         }
 
         .visual-card-header {
@@ -317,6 +346,16 @@ export const Hero: React.FC = () => {
           line-height: 1.5;
           text-align: left;
           overflow-x: auto;
+        }
+
+        @keyframes dot-drift {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(20px, 20px, 0); }
+        }
+
+        @keyframes visual-float {
+          0%, 100% { transform: translate3d(0, 0, 0); }
+          50% { transform: translate3d(0, -8px, 0); }
         }
 
         @media (max-width: 900px) {

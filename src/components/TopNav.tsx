@@ -42,6 +42,8 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
     const id = item.id;
     const element = document.getElementById(id);
     if (element) {
+      window.history.pushState({}, '', id === 'home' ? '/#home' : `/#${id}`);
+      window.dispatchEvent(new Event('portfolio:navigation'));
       const offset = 80; // height of navbar + some spacing
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
@@ -77,7 +79,16 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
                     onClick={(e) => handleNavClick(e, item)}
                     className={`top-nav__link ${activeSection === item.id ? 'is-active' : ''}`}
                   >
+                    {activeSection === item.id && (
+                      <motion.span
+                        className="top-nav__active-pill"
+                        layoutId="top-nav-active-pill"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="top-nav__link-label">
                     {item.label}
+                    </span>
                   </a>
                 </li>
               ))}
@@ -217,6 +228,23 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
           font-size: 13px;
           color: var(--color-text-secondary);
           transition: color var(--motion-fast) var(--ease-standard);
+          isolation: isolate;
+        }
+
+        .top-nav__link-label {
+          position: relative;
+          z-index: 2;
+        }
+
+        .top-nav__active-pill {
+          position: absolute;
+          left: var(--space-3);
+          right: var(--space-3);
+          bottom: 2px;
+          height: 1px;
+          z-index: 1;
+          background: var(--color-orange);
+          border-radius: 999px;
         }
 
         .top-nav__link:hover {

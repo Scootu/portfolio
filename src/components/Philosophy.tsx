@@ -69,6 +69,8 @@ export const Philosophy: React.FC = () => {
                 key={pr.num} 
                 className="philosophy-card"
                 variants={itemVariants}
+                whileHover={{ y: -6, scale: 1.015 }}
+                transition={{ type: 'spring', stiffness: 360, damping: 28 }}
               >
                 <div className="p-card-header">
                   <span className="p-card-num">{pr.num}</span>
@@ -115,8 +117,11 @@ export const Philosophy: React.FC = () => {
         .philosophy-card:hover {
           border-color: var(--color-blue);
           background: var(--color-bg-tertiary-hover);
-          transform: translateY(-2px);
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .philosophy-card:hover .principle-icon {
+          animation: icon-pulse 0.8s ease-in-out;
         }
 
         .p-card-header {
@@ -144,6 +149,35 @@ export const Philosophy: React.FC = () => {
         .p-card-icon-container {
           margin-bottom: var(--space-3);
           color: var(--color-blue);
+        }
+
+        .philosophy-card:nth-child(1):hover .principle-icon {
+          animation: icon-rotate 1.1s ease-in-out;
+        }
+
+        .philosophy-card:nth-child(2):hover .principle-icon {
+          animation: icon-pulse 0.75s ease-in-out;
+        }
+
+        .philosophy-card:nth-child(3):hover .principle-icon {
+          animation: icon-shake 0.65s ease-in-out;
+        }
+
+        @keyframes icon-rotate {
+          0% { transform: rotate(0deg); }
+          70% { transform: rotate(18deg); }
+          100% { transform: rotate(0deg); }
+        }
+
+        @keyframes icon-pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.18); }
+        }
+
+        @keyframes icon-shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-2px) rotate(-4deg); }
+          75% { transform: translateX(2px) rotate(4deg); }
         }
 
         .p-card-title {
