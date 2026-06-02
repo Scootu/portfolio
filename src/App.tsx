@@ -129,9 +129,17 @@ function App() {
       {/* Page Content */}
       <main style={{ marginTop: '64px' }}>
         {isDemAiPage ? (
-          <DemAiProject />
+          <>
+            <DemAiProject />
+            <Contact />
+            <PortfolioFooter />
+          </>
         ) : isMechanicShopPage ? (
-          <MechanicShopProject />
+          <>
+            <MechanicShopProject />
+            <Contact />
+            <PortfolioFooter />
+          </>
         ) : isContactPage ? (
           <>
             <ContactPage />

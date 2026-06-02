@@ -17,11 +17,16 @@ export const Terminal: React.FC = () => {
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalLogsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Scroll terminal to bottom when history updates
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const logs = terminalLogsRef.current;
+    if (!logs) return;
+    logs.scrollTo({
+      top: logs.scrollHeight,
+      behavior: 'smooth'
+    });
   }, [history]);
 
   const focusInput = () => {
@@ -206,7 +211,7 @@ export const Terminal: React.FC = () => {
               </div>
 
               <div className="terminal-window-body">
-                <div className="terminal-logs">
+                <div className="terminal-logs" ref={terminalLogsRef}>
                   {history.map((entry, idx) => (
                     <motion.div
                       key={`${idx}-${entry.text}`}
