@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TopNav } from './components/TopNav';
 import { Hero } from './components/Hero';
 import { Problem } from './components/Problem';
@@ -127,39 +128,65 @@ function App() {
       />
 
       {/* Page Content */}
-      <main style={{ marginTop: '64px' }}>
-        {isDemAiPage ? (
-          <>
-            <DemAiProject />
-            <Contact />
-            <PortfolioFooter />
-          </>
-        ) : isMechanicShopPage ? (
-          <>
-            <MechanicShopProject />
-            <Contact />
-            <PortfolioFooter />
-          </>
-        ) : isContactPage ? (
-          <>
-            <ContactPage />
-            <PortfolioFooter />
-          </>
-        ) : (
-          <>
-            <Hero />
-            <Problem />
-            <About />
-            <Philosophy />
-            <Projects />
-            <Terminal />
-            <Services />
-            <Writing />
-            <Proof />
-            <Contact />
-            <PortfolioFooter />
-          </>
-        )}
+      <main style={{ marginTop: '64px', minHeight: 'calc(100vh - 64px - 45px)' }}>
+        <AnimatePresence mode="wait">
+          {isDemAiPage ? (
+            <motion.div
+              key="dem-ai"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <DemAiProject />
+              <Contact />
+              <PortfolioFooter />
+            </motion.div>
+          ) : isMechanicShopPage ? (
+            <motion.div
+              key="mechanic-shop"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <MechanicShopProject />
+              <Contact />
+              <PortfolioFooter />
+            </motion.div>
+          ) : isContactPage ? (
+            <motion.div
+              key="contact"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <ContactPage />
+              <PortfolioFooter />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="home"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <Hero />
+              <Problem />
+              <About />
+              <Philosophy />
+              <Projects />
+              <Terminal />
+              <Services />
+              <Writing />
+              <Proof />
+              <Contact />
+              <PortfolioFooter />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Status Bar */}

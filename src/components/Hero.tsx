@@ -1,24 +1,11 @@
 import React from 'react';
 import { Download, Terminal as TerminalIcon, ArrowRight } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
+import { HeroBackground } from './HeroBackground';
+
+const NAME = 'Anes Hamdaoui';
 
 export const Hero: React.FC = () => {
-  const contentVariants: Variants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.09, delayChildren: 0.12 }
-    }
-  };
-
-  const revealVariants: Variants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.58, ease: [0.22, 1, 0.36, 1] }
-    }
-  };
-
   const techStack = [
     { label: 'C#', type: 'backend' },
     { label: 'ASP.NET Core', type: 'backend' },
@@ -48,38 +35,98 @@ export const Hero: React.FC = () => {
     }
   };
 
+  const containerVariants: Variants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+    }
+  };
+
+  // Per-character reveal for the name — letters rise + fade in sequence.
+  const nameContainer: Variants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.045, delayChildren: 0.15 }
+    }
+  };
+
+  const letterVariants: Variants = {
+    hidden: { opacity: 0, y: '0.45em' },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.55, ease: [0.2, 0.65, 0.3, 0.9] }
+    }
+  };
+
+  const visualVariants: Variants = {
+    hidden: { opacity: 0, x: 30, scale: 0.96 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: { duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }
+    }
+  };
+
   return (
     <>
       <section className="hero-section" id="home">
+        <HeroBackground />
         <div className="hero-container container">
           <div className="hero-grid">
-            <motion.div
+            <motion.div 
               className="hero-content"
-              variants={contentVariants}
+              variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
-              <motion.div className="hero-eyebrow" variants={revealVariants}>
+              <motion.div className="hero-eyebrow" variants={itemVariants}>
                 <span className="badge-pill badge-pill--orange">
                   <span className="eyebrow-dot"></span> AVAILABLE FOR OPPORTUNITIES
                 </span>
               </motion.div>
 
-              <motion.h1 className="hero-title" variants={revealVariants}>
-                Anes Hamdaoui
+              <motion.h1
+                className="hero-title"
+                variants={nameContainer}
+                aria-label={NAME}
+              >
+                {NAME.split('').map((ch, i) => (
+                  <motion.span
+                    key={`${ch}-${i}`}
+                    className="hero-title-char"
+                    variants={letterVariants}
+                    aria-hidden="true"
+                  >
+                    {ch === ' ' ? ' ' : ch}
+                  </motion.span>
+                ))}
               </motion.h1>
 
-              <motion.h2 className="hero-subtitle" variants={revealVariants}>
+              <motion.h2 className="hero-subtitle" variants={itemVariants}>
                 Full Stack Developer <span className="subtitle-sep">//</span> Building Systems that Scale
               </motion.h2>
 
-              <motion.p className="hero-description" variants={revealVariants}>
+              <motion.p className="hero-description" variants={itemVariants}>
                 I am a Full Stack Developer specializing in robust backend architectures using <strong>C#</strong>, <strong>ASP.NET Core</strong>, 
                 and <strong>Clean Architecture</strong> combined with responsive frontends built in <strong>React</strong> and <strong>TypeScript</strong>. 
                 I focus on writing clean, maintainable systems, optimization, and solving complex engineering challenges.
               </motion.p>
 
-              <motion.div className="hero-actions" variants={revealVariants}>
+              <motion.div className="hero-actions" variants={itemVariants}>
                 <a 
                   href="/Anes-hamdaoui-1.pdf" 
                   download="Anes-Hamdaoui-CV.pdf"
@@ -95,7 +142,7 @@ export const Hero: React.FC = () => {
                 </button>
               </motion.div>
 
-              <motion.div className="hero-tech-container" variants={revealVariants}>
+              <motion.div className="hero-tech-container" variants={itemVariants}>
                 <span className="tech-label">CORE STACK //</span>
                 <div className="tech-pills">
                   {techStack.map((tech) => (
@@ -113,14 +160,13 @@ export const Hero: React.FC = () => {
               </motion.div>
             </motion.div>
 
-            <motion.div
-              className="hero-visual"
-              initial={{ opacity: 0, y: 30, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="visual-grid-overlay"></div>
-              <div className="visual-card">
+            <div className="hero-visual">
+              <motion.div
+                className="visual-card"
+                variants={visualVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 <div className="visual-card-header">
                   <div className="window-dots">
                     <span className="dot dot--red"></span>
@@ -153,8 +199,8 @@ export const Hero: React.FC = () => {
                     </code>
                   </pre>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -201,6 +247,13 @@ export const Hero: React.FC = () => {
           letter-spacing: 0;
           color: var(--color-text-primary);
           margin-bottom: var(--space-2);
+          min-height: 1.2em;
+        }
+
+        .hero-title-char {
+          display: inline-block;
+          white-space: pre;
+          transform-origin: bottom;
         }
 
         .hero-subtitle {
@@ -278,18 +331,6 @@ export const Hero: React.FC = () => {
           align-items: center;
         }
 
-        .visual-grid-overlay {
-          position: absolute;
-          inset: -40px;
-          background-image: 
-            radial-gradient(var(--color-border) 1px, transparent 1px);
-          background-size: 20px 20px;
-          opacity: 0.35;
-          z-index: 1;
-          pointer-events: none;
-          animation: dot-drift 18s linear infinite;
-        }
-
         .visual-card {
           width: 100%;
           max-width: 440px;
@@ -346,11 +387,6 @@ export const Hero: React.FC = () => {
           line-height: 1.5;
           text-align: left;
           overflow-x: auto;
-        }
-
-        @keyframes dot-drift {
-          0% { transform: translate3d(0, 0, 0); }
-          100% { transform: translate3d(20px, 20px, 0); }
         }
 
         @keyframes visual-float {

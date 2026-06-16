@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export const About: React.FC = () => {
   const stats = [
@@ -12,7 +13,13 @@ export const About: React.FC = () => {
   return (
     <section className="section-box about-section" id="about">
       <div className="about-wide-container">
-        <div className="about-panel">
+        <motion.div 
+          className="about-panel"
+          initial={{ opacity: 0, y: 34 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.65, ease: 'easeOut' }}
+        >
           <span className="about-number">03</span>
           <span className="about-orbit" aria-hidden="true" />
           <div className="about-copy">
@@ -29,7 +36,7 @@ export const About: React.FC = () => {
               <CountUpStat key={stat.label} {...stat} />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <style>{`

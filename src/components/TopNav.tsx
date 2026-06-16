@@ -238,13 +238,11 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
 
         .top-nav__active-pill {
           position: absolute;
-          left: var(--space-3);
-          right: var(--space-3);
-          bottom: 2px;
-          height: 1px;
+          inset: 0;
           z-index: 1;
-          background: var(--color-orange);
-          border-radius: 999px;
+          background: var(--color-border-subtle);
+          border: 1px solid var(--color-border);
+          border-radius: 4px;
         }
 
         .top-nav__link:hover {
@@ -275,8 +273,7 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
         }
 
         .top-nav__link.is-active::after {
-          transform: scaleX(1);
-          background: var(--color-orange);
+          display: none;
         }
 
         .top-nav__theme-toggle {

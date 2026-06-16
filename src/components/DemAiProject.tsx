@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   TestTube2,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const tabs = [
   {
@@ -376,15 +377,23 @@ export const DemAiProject: React.FC = () => {
               </div>
 
               <div className="vscode-panel">
-                <div className="panel-copy">
-                  <span className="panel-kicker font-mono">selected_module.cs</span>
-                  <h2>{activeTab.title}</h2>
-                  <p>{activeTab.text}</p>
-                </div>
+                <motion.div
+                  key={activeTab.id}
+                  className="vscode-panel-content"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.28, ease: 'easeOut' }}
+                >
+                  <div className="panel-copy">
+                    <span className="panel-kicker font-mono">selected_module.cs</span>
+                    <h2>{activeTab.title}</h2>
+                    <p>{activeTab.text}</p>
+                  </div>
 
-                <pre className="code-inspector">
-                  <code>{activeTab.code}</code>
-                </pre>
+                  <pre className="code-inspector">
+                    <code>{activeTab.code}</code>
+                  </pre>
+                </motion.div>
               </div>
             </main>
           </div>
@@ -726,6 +735,20 @@ export const DemAiProject: React.FC = () => {
           gap: var(--space-5);
           padding: var(--space-6);
           flex: 1;
+        }
+
+        .vscode-panel-content {
+          display: grid;
+          grid-template-columns: minmax(280px, 0.55fr) minmax(0, 1fr);
+          gap: var(--space-5);
+          width: 100%;
+          grid-column: 1 / -1;
+        }
+
+        @media (max-width: 1050px) {
+          .vscode-panel-content {
+            grid-template-columns: 1fr;
+          }
         }
 
         .panel-copy {
