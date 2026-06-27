@@ -3,8 +3,47 @@ import { ArrowUpRight, CheckCircle2, Copy, Link2 } from 'lucide-react';
 
 const email = 'anes-hamdaoui@univ-dbkm.dz';
 
+type FormStatus = 'idle' | 'sending' | 'success' | 'error';
+
+const encodeForm = (data: Record<string, string>) =>
+  Object.keys(data)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+    .join('&');
+
 export const ContactPage: React.FC = () => {
   const [copied, setCopied] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [botField, setBotField] = useState('');
+  const [status, setStatus] = useState<FormStatus>('idle');
+
+  const updateField = (field: keyof typeof form) => (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setForm((prev) => ({ ...prev, [field]: event.target.value }));
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (status === 'sending') return;
+    setStatus('sending');
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodeForm({
+          'form-name': 'contact',
+          'bot-field': botField,
+          ...form
+        })
+      });
+
+      if (!response.ok) throw new Error('Request failed');
+
+      setStatus('success');
+      setForm({ name: '', email: '', subject: '', message: '' });
+    } catch {
+      setStatus('error');
+    }
+  };
 
   const copyEmail = async () => {
     try {
@@ -51,6 +90,103 @@ export const ContactPage: React.FC = () => {
           <p className="contact-page__lede">
             Email works best. Tell me what is going on and I will take it from there.
           </p>
+
+          <form
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            className="contact-form"
+            onSubmit={handleSubmit}
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p className="contact-form__hp" aria-hidden="true">
+              <label>
+                Do not fill this out if you are human:
+                <input
+                  name="bot-field"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={botField}
+                  onChange={(event) => setBotField(event.target.value)}
+                />
+              </label>
+            </p>
+
+            <p className="contact-form__title font-mono">Send a message</p>
+
+            <div className="contact-form__row">
+              <div className="contact-form__field">
+                <label htmlFor="cf-name" className="font-mono">Name</label>
+                <input
+                  id="cf-name"
+                  name="name"
+                  type="text"
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={updateField('name')}
+                />
+              </div>
+              <div className="contact-form__field">
+                <label htmlFor="cf-email" className="font-mono">Your email *</label>
+                <input
+                  id="cf-email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={updateField('email')}
+                />
+              </div>
+            </div>
+
+            <div className="contact-form__field">
+              <label htmlFor="cf-subject" className="font-mono">Subject *</label>
+              <input
+                id="cf-subject"
+                name="subject"
+                type="text"
+                required
+                placeholder="What is this about?"
+                value={form.subject}
+                onChange={updateField('subject')}
+              />
+            </div>
+
+            <div className="contact-form__field">
+              <label htmlFor="cf-message" className="font-mono">Message *</label>
+              <textarea
+                id="cf-message"
+                name="message"
+                rows={5}
+                required
+                placeholder="Tell me what you are building..."
+                value={form.message}
+                onChange={updateField('message')}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="contact-form__submit font-mono"
+              disabled={status === 'sending'}
+            >
+              {status === 'sending' ? 'Sending...' : 'Send message'}
+              <ArrowUpRight size={15} />
+            </button>
+
+            {status === 'success' && (
+              <p className="contact-form__status contact-form__status--ok font-mono">
+                <CheckCircle2 size={15} /> Message sent — I will get back to you soon.
+              </p>
+            )}
+            {status === 'error' && (
+              <p className="contact-form__status contact-form__status--err font-mono">
+                Something went wrong. Please email me directly at {email}.
+              </p>
+            )}
+          </form>
 
           <div className="contact-methods">
             <article className="contact-method is-primary">
@@ -287,6 +423,117 @@ export const ContactPage: React.FC = () => {
           line-height: 1.7;
         }
 
+        .contact-form {
+          margin-top: var(--space-8);
+          padding: var(--space-7);
+          border: 1px solid var(--color-blue);
+          background: color-mix(in srgb, var(--color-blue) 3%, var(--color-bg-primary));
+          max-width: 760px;
+        }
+
+        .contact-form__hp {
+          position: absolute;
+          left: -9999px;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+        }
+
+        .contact-form__title {
+          color: var(--color-text-tertiary);
+          font-size: 12px;
+          margin-bottom: var(--space-5);
+        }
+
+        .contact-form__row {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: var(--space-4);
+        }
+
+        .contact-form__field {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-2);
+          margin-bottom: var(--space-4);
+        }
+
+        .contact-form__field label {
+          color: var(--color-text-secondary);
+          font-size: 12px;
+        }
+
+        .contact-form__field input,
+        .contact-form__field textarea {
+          width: 100%;
+          padding: var(--space-3) var(--space-4);
+          border: 1px solid var(--color-border);
+          background: var(--color-bg-primary);
+          color: var(--color-text-primary);
+          font-family: var(--font-body);
+          font-size: 15px;
+          transition: border-color var(--motion-fast) var(--ease-standard);
+        }
+
+        .contact-form__field textarea {
+          resize: vertical;
+          min-height: 120px;
+          line-height: 1.6;
+        }
+
+        .contact-form__field input:focus,
+        .contact-form__field textarea:focus {
+          outline: none;
+          border-color: var(--color-blue);
+        }
+
+        .contact-form__field input::placeholder,
+        .contact-form__field textarea::placeholder {
+          color: var(--color-text-tertiary);
+        }
+
+        .contact-form__submit {
+          display: inline-flex;
+          align-items: center;
+          gap: var(--space-2);
+          min-height: 48px;
+          margin-top: var(--space-2);
+          padding: 0 var(--space-6);
+          border: 1px solid var(--color-blue);
+          background: var(--color-blue);
+          color: #fff;
+          font-weight: 700;
+          font-size: 13px;
+          transition: background var(--motion-fast) var(--ease-standard),
+                      border-color var(--motion-fast) var(--ease-standard);
+        }
+
+        .contact-form__submit:hover:not(:disabled) {
+          background: var(--color-black);
+          border-color: var(--color-black);
+        }
+
+        .contact-form__submit:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .contact-form__status {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+          margin-top: var(--space-4);
+          font-size: 13px;
+        }
+
+        .contact-form__status--ok {
+          color: var(--color-green);
+        }
+
+        .contact-form__status--err {
+          color: var(--color-orange);
+        }
+
         .contact-methods {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -497,8 +744,17 @@ export const ContactPage: React.FC = () => {
           }
 
           .contact-methods,
-          .contact-process {
+          .contact-process,
+          .contact-form {
             max-width: 320px;
+          }
+
+          .contact-form {
+            padding: var(--space-5);
+          }
+
+          .contact-form__row {
+            grid-template-columns: 1fr;
           }
 
           .contact-method__copy {
