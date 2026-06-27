@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Terminal as TerminalIcon, ArrowRight } from 'lucide-react';
+import { Download, ArrowRight } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
 import { HeroBackground } from './HeroBackground';
 
@@ -134,11 +134,11 @@ export const Hero: React.FC = () => {
                 >
                   <Download size={14} /> Download CV
                 </a>
-                <button 
-                  onClick={() => handleScrollToSection('terminal')}
+                <button
+                  onClick={() => handleScrollToSection('projects')}
                   className="btn-secondary hero-btn"
                 >
-                  <TerminalIcon size={14} /> Run Terminal <ArrowRight size={12} className="btn-arrow" />
+                  View Work <ArrowRight size={12} className="btn-arrow" />
                 </button>
               </motion.div>
 
@@ -173,31 +173,15 @@ export const Hero: React.FC = () => {
                     <span className="dot dot--yellow"></span>
                     <span className="dot dot--green"></span>
                   </div>
-                  <div className="window-title">system_info.json</div>
+                  <div className="window-title">anes_hamdaoui.png</div>
                 </div>
-                <div className="visual-card-body">
-                  <pre className="code-block">
-                    <code>
-{`{
-  "developer": {
-    "name": "Anes Hamdaoui",
-    "role": "Full Stack Developer",
-    "location": "Algeria, Ain Defla",
-    "degree": "B.Sc. in Computer Science"
-  },
-  "capabilities": [
-    "Clean Architecture / SOLID",
-    "Database Optimization & Design",
-    "High-Performance APIs",
-    "Single Page App Orchestration"
-  ],
-  "experience": {
-    "status": "Ready to build",
-    "focus": "Backend scalability & clean code"
-  }
-}`}
-                    </code>
-                  </pre>
+                <div className="visual-card-body visual-card-body--photo">
+                  <img
+                    className="hero-photo"
+                    src="/anes-photo.png"
+                    alt="Anes Hamdaoui"
+                    loading="eager"
+                  />
                 </div>
               </motion.div>
             </div>
@@ -380,13 +364,16 @@ export const Hero: React.FC = () => {
           background: #141414;
         }
 
-        .code-block {
-          font-family: var(--font-mono);
-          font-size: 12px;
-          color: #a9b1d6;
-          line-height: 1.5;
-          text-align: left;
-          overflow-x: auto;
+        .visual-card-body--photo {
+          padding: 0;
+        }
+
+        .hero-photo {
+          display: block;
+          width: 100%;
+          height: auto;
+          aspect-ratio: 1 / 1;
+          object-fit: cover;
         }
 
         @keyframes visual-float {

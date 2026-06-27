@@ -27,7 +27,7 @@ export const PortfolioFooter: React.FC = () => {
         </div>
 
         <div className="footer-bottom font-mono">
-          <span>Made in Ain Defla //</span>
+          <span>Made in Algeria //</span>
           <span>portfolio.{new Date().getFullYear()}</span>
         </div>
       </div>

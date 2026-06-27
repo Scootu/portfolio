@@ -30,7 +30,7 @@ export const Contact: React.FC = () => {
         <div className="contact-links font-mono">
           <a href="https://github.com/Scootu/" target="_blank" rel="noopener noreferrer">github</a>
           <a href="https://linkedin.com/in/anes-hamdaoui-8239a8216" target="_blank" rel="noopener noreferrer">linkedin</a>
-          <span>Ain Defla, Algeria</span>
+          <span>Algeria</span>
         </div>
       </div>
 
