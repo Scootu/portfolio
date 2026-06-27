@@ -147,11 +147,17 @@ export const Projects: React.FC = () => {
           background: color-mix(in srgb, var(--color-bg-primary) 84%, transparent);
           transition: border-color var(--motion-medium) var(--ease-standard), box-shadow var(--motion-medium) var(--ease-standard);
           transform-style: preserve-3d;
+          cursor: pointer;
         }
 
         .work-card:hover {
           border-color: var(--work-accent);
           box-shadow: 0 18px 48px rgba(0,0,0,0.08);
+        }
+
+        .work-card:focus-visible {
+          outline: 2px solid var(--work-accent);
+          outline-offset: 3px;
         }
 
         .work-card--blue { --work-accent: var(--color-blue); --work-soft: var(--color-blue-subtle); }
@@ -413,6 +419,16 @@ export const Projects: React.FC = () => {
   );
 };
 
+const navigateToProject = (href: string) => {
+  if (href.startsWith('http')) {
+    window.open(href, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  window.history.pushState({}, '', href);
+  window.dispatchEvent(new Event('portfolio:navigation'));
+  window.scrollTo({ top: 0, behavior: 'auto' });
+};
+
 const ProjectCard: React.FC<{ project: ProjectItem; variants: Variants }> = ({ project, variants }) => {
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
@@ -432,6 +448,13 @@ const ProjectCard: React.FC<{ project: ProjectItem; variants: Variants }> = ({ p
     pointerY.set(0);
   };
 
+  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      navigateToProject(project.href);
+    }
+  };
+
   return (
     <motion.article
       className={`work-card work-card--${project.accent}`}
@@ -439,6 +462,11 @@ const ProjectCard: React.FC<{ project: ProjectItem; variants: Variants }> = ({ p
       whileHover={{ y: -8 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={resetTilt}
+      onClick={() => navigateToProject(project.href)}
+      onKeyDown={handleCardKeyDown}
+      role="link"
+      tabIndex={0}
+      aria-label={`Open ${project.title} project`}
     >
       <div className="work-preview">
         <motion.div
@@ -472,6 +500,13 @@ const ProjectCard: React.FC<{ project: ProjectItem; variants: Variants }> = ({ p
           href={project.href}
           target={project.href.startsWith('http') ? '_blank' : undefined}
           rel={project.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          onClick={(event) => {
+            event.stopPropagation();
+            if (!project.href.startsWith('http')) {
+              event.preventDefault();
+              navigateToProject(project.href);
+            }
+          }}
         >
           View case study <ArrowUpRight size={13} />
         </a>
