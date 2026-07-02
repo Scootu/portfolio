@@ -2,62 +2,67 @@ import React, { useState } from 'react';
 import {
   ArrowLeft,
   ArrowUpRight,
-  CheckCircle2,
-  FileCode2,
-  GitBranch,
+  Coins,
+  Languages,
+  Layers,
   Maximize2,
   ShieldCheck,
 } from 'lucide-react';
 import { Lightbox, type LightboxImage } from './Lightbox';
 
-const productScreenshots = [
+const screenshots = [
   {
-    title: 'Patient portal',
-    desc: 'Verified patient access entry point through NIN lookup.',
-    src: '/demai/patient-portal.webp'
+    title: 'Landing page',
+    desc: 'Search-first home built for Algerian wilayas with categories and a live feed of client requests.',
+    src: '/souqpro/homepage.png'
   },
   {
-    title: 'Doctor appointments',
-    desc: 'Calendar planning with daily appointment limits and selected-day details.',
-    src: '/demai/appointments-calendar.webp'
+    title: 'Verified artisans',
+    desc: 'Directory of verified providers filterable by wilaya and category, with ratings and trade tags.',
+    src: '/souqpro/artisans.png'
   },
   {
-    title: 'Prescription builder',
-    desc: 'Medication list, diagnosis text, and generated prescription preview.',
-    src: '/demai/prescription-builder.webp'
+    title: 'Service requests',
+    desc: 'Public board of client requests (demandes) with budget ranges, location, category, and offer counts.',
+    src: '/souqpro/demandes.png'
   },
   {
-    title: 'Pharmacy stock',
-    desc: 'Stock and family-drug management for pharmacist workflows.',
-    src: '/demai/stock-management.webp'
+    title: 'Points & pricing',
+    desc: 'Points-pack pricing model — providers buy points and only spend them when sending an offer.',
+    src: '/souqpro/pricing.png'
   },
   {
-    title: 'Medication history',
-    desc: 'Patient medication history table with doctor, enterprise, and diagnosis labels.',
-    src: '/demai/medication-history.webp'
+    title: 'Sign up',
+    desc: 'Role-based registration where a user joins as a Client or as an Artisan (provider).',
+    src: '/souqpro/register.png'
+  },
+  {
+    title: 'Authentication',
+    desc: 'Firebase-backed login with Google sign-in, OTP password reset, and role selection.',
+    src: '/souqpro/login.png'
   }
 ];
 
 const techGroups = [
   {
     label: '// frontend',
-    items: ['React', 'REST API Client']
+    items: ['React', 'React Router', 'Tailwind CSS', 'Lucide Icons']
   },
   {
-    label: '// backend',
-    items: ['ASP.NET Core', 'C# / .NET', 'REST API']
+    label: '// backend & data',
+    items: ['Firebase Authentication', 'Cloud Firestore', 'Cloud Storage']
   },
   {
-    label: '// architecture',
-    items: ['Clean Architecture', 'CQRS', 'Result Pattern']
+    label: '// auth & access',
+    items: ['Google OAuth', 'OTP Verification', 'Role-based Access']
   },
   {
-    label: '// security & validation',
-    items: ['JWT', 'Role-based Policies', 'FluentValidation']
+    label: '// tooling & i18n',
+    items: ['Axios', 'i18n (FR / AR)', 'RTL Layout', 'Netlify']
   }
 ];
 
-export const DemAiProject: React.FC = () => {
+export const SouqProProject: React.FC = () => {
   const [activeShot, setActiveShot] = useState<LightboxImage | null>(null);
 
   const handleBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -70,64 +75,73 @@ export const DemAiProject: React.FC = () => {
   };
 
   return (
-    <section className="project-detail-page">
-      <div className="detail-grid-bg" aria-hidden="true" />
+    <section className="souq-detail-page">
+      <div className="souq-grid-bg" aria-hidden="true" />
 
-      <div className="container detail-hero">
-        <a href="/#projects" className="detail-back font-mono" onClick={handleBack}>
+      <div className="container souq-hero">
+        <a href="/#projects" className="souq-back font-mono" onClick={handleBack}>
           <ArrowLeft size={14} /> All Projects
         </a>
 
-        <div className="detail-tags font-mono">
-          <span className="detail-square" />
+        <div className="souq-tags font-mono">
+          <span className="souq-square" />
           <span>2026</span>
-          <span>ASP.NET Core</span>
-          <span>Healthcare SaaS</span>
+          <span>React</span>
+          <span>Firebase</span>
+          <span>Services Marketplace</span>
         </div>
 
-        <div className="detail-hero-grid">
+        <div className="souq-hero-grid">
           <div>
-            <div className="section-kicker font-mono">// project.dem-ai</div>
-            <h1>DEM AI</h1>
-            <p className="detail-role font-mono">Full-Stack Healthcare Platform</p>
-            <p className="detail-summary">
-              A medical ecosystem connecting patients, physicians, and pharmacies — appointment scheduling, prescriptions, medication history, and pharmacy stock management in one platform.
+            <div className="section-kicker font-mono">// project.souqpro</div>
+            <h1>SouqPro</h1>
+            <p className="souq-role font-mono">Services Marketplace — Algeria</p>
+            <p className="souq-summary">
+              A bilingual marketplace that connects Algerian households with verified artisans — plumbers, electricians, painters, and more. Clients post a request for free; providers spend points to send offers.
             </p>
-            <div className="detail-actions">
+            <div className="souq-actions">
               <a
-                className="detail-demo-link font-mono"
-                href="https://ice-machine.github.io/HealthCare/"
+                className="souq-demo-link font-mono"
+                href="https://souqpro.netlify.app/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Open live demo <ArrowUpRight size={14} />
+                Open live site <ArrowUpRight size={14} />
               </a>
             </div>
           </div>
 
-          <div className="detail-metrics">
-            <Metric icon={<ShieldCheck size={18} />} label="Security" value="JWT + role policies" />
-            <Metric icon={<GitBranch size={18} />} label="Application" value="CQRS handlers" />
-            <Metric icon={<CheckCircle2 size={18} />} label="Outcome Flow" value="Result Pattern" />
-            <Metric icon={<FileCode2 size={18} />} label="Validation" value="FluentValidation" />
+          <div className="souq-metrics">
+            <Metric icon={<Layers size={18} />} label="Platform" value="React SPA" />
+            <Metric icon={<ShieldCheck size={18} />} label="Auth" value="Firebase + OAuth" />
+            <Metric icon={<Coins size={18} />} label="Marketplace" value="Points-based offers" />
+            <Metric icon={<Languages size={18} />} label="Localization" value="FR / AR (RTL)" />
           </div>
         </div>
       </div>
 
-      <div className="container detail-sections">
-        <article className="detail-section-card">
+      <div className="container souq-sections">
+        <article className="souq-card">
+          <span className="section-index font-mono">00</span>
+          <h2>What It Is</h2>
+          <p>
+            SouqPro is a services marketplace built for Algeria&apos;s wilayas. Clients browse trades and post a service request for free, while verified artisans discover nearby demand and compete for the job by sending offers. It ships with a client, provider, and admin dashboard and works in both French and Arabic.
+          </p>
+        </article>
+
+        <article className="souq-card">
           <span className="section-index font-mono">01</span>
           <h2>Technologies</h2>
           <p>
-            DEM AI pairs a React front end with an ASP.NET Core back end organised around Clean Architecture, keeping request handling, validation, and security concerns cleanly separated.
+            SouqPro is a single-page React application backed entirely by Firebase — authentication, Firestore data, and file storage — with a Tailwind design system and full French / Arabic (RTL) localization.
           </p>
-          <div className="tech-groups">
+          <div className="souq-tech-groups">
             {techGroups.map((group) => (
-              <div className="tech-group" key={group.label}>
-                <span className="tech-label font-mono">{group.label}</span>
-                <div className="tech-chips">
+              <div className="souq-tech-group" key={group.label}>
+                <span className="souq-tech-label font-mono">{group.label}</span>
+                <div className="souq-tech-chips">
                   {group.items.map((item) => (
-                    <span className="tech-chip font-mono" key={item}>{item}</span>
+                    <span className="souq-tech-chip font-mono" key={item}>{item}</span>
                   ))}
                 </div>
               </div>
@@ -135,14 +149,14 @@ export const DemAiProject: React.FC = () => {
           </div>
         </article>
 
-        <article className="detail-section-card screenshot-card">
+        <article className="souq-card">
           <span className="section-index font-mono">02</span>
           <h2>Product Screenshots</h2>
           <p>
-            A look at the product itself: patient access, doctor scheduling, prescriptions, medication history, and pharmacist stock management.
+            A look at the product itself: the search-first landing, verified artisan directory, live request board, the points pricing model, and Firebase-backed authentication.
           </p>
-          <div className="screenshot-grid">
-            {productScreenshots.map((shot) => (
+          <div className="souq-screenshots">
+            {screenshots.map((shot) => (
               <ScreenshotCard
                 key={shot.title}
                 {...shot}
@@ -151,7 +165,7 @@ export const DemAiProject: React.FC = () => {
                     title: shot.title,
                     desc: shot.desc,
                     src: shot.src,
-                    alt: `DEM AI ${shot.title} screenshot`
+                    alt: `SouqPro ${shot.title} screenshot`
                   })
                 }
               />
@@ -163,15 +177,16 @@ export const DemAiProject: React.FC = () => {
       <Lightbox image={activeShot} onClose={() => setActiveShot(null)} />
 
       <style>{`
-        .project-detail-page {
+        .souq-detail-page {
           position: relative;
           min-height: 100vh;
           padding-bottom: var(--space-10);
           background: var(--color-bg-primary);
           overflow: hidden;
+          --souq-accent: var(--color-green);
         }
 
-        .detail-grid-bg {
+        .souq-grid-bg {
           position: fixed;
           inset: 64px 0 0;
           background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
@@ -180,17 +195,17 @@ export const DemAiProject: React.FC = () => {
           pointer-events: none;
         }
 
-        .detail-hero,
-        .detail-sections {
+        .souq-hero,
+        .souq-sections {
           position: relative;
           z-index: 2;
         }
 
-        .detail-hero {
+        .souq-hero {
           padding: var(--space-8) var(--container-pad) var(--space-7);
         }
 
-        .detail-back {
+        .souq-back {
           display: inline-flex;
           align-items: center;
           gap: var(--space-2);
@@ -199,11 +214,11 @@ export const DemAiProject: React.FC = () => {
           margin-bottom: var(--space-6);
         }
 
-        .detail-back:hover {
-          color: var(--color-blue);
+        .souq-back:hover {
+          color: var(--souq-accent);
         }
 
-        .detail-tags {
+        .souq-tags {
           display: flex;
           align-items: center;
           flex-wrap: wrap;
@@ -213,61 +228,63 @@ export const DemAiProject: React.FC = () => {
           font-size: 12px;
         }
 
-        .detail-tags span:not(.detail-square) {
+        .souq-tags span:not(.souq-square) {
           border: 1px solid var(--color-border);
           background: var(--color-bg-tertiary);
           padding: 6px 12px;
         }
 
-        .detail-tags span:nth-child(2) {
+        .souq-tags span:nth-child(2) {
           color: var(--color-orange);
           background: var(--color-orange-subtle);
         }
 
-        .detail-square {
+        .souq-square {
           width: 12px;
           height: 12px;
-          background: var(--color-text-primary);
+          background: var(--souq-accent);
           margin-right: var(--space-4);
         }
 
-        .detail-hero-grid {
+        .souq-hero-grid {
           display: grid;
           grid-template-columns: minmax(0, 1fr) minmax(360px, 0.65fr);
           gap: var(--space-8);
           align-items: end;
         }
 
-        .detail-hero h1 {
+        .souq-hero h1 {
+          max-width: 980px;
           font-family: var(--font-body);
-          font-size: clamp(58px, 8vw, 124px);
+          font-size: clamp(52px, 7.5vw, 112px);
           font-weight: 800;
           letter-spacing: 0;
+          line-height: 0.96;
           margin: var(--space-3) 0;
         }
 
-        .detail-role {
-          color: var(--color-blue);
+        .souq-role {
+          color: var(--souq-accent);
           font-size: 18px;
           margin-bottom: var(--space-4);
         }
 
-        .detail-summary {
-          max-width: 780px;
+        .souq-summary {
+          max-width: 820px;
           color: var(--color-text-secondary);
           font-size: 21px;
           line-height: 1.65;
           font-style: italic;
         }
 
-        .detail-actions {
+        .souq-actions {
           display: flex;
           flex-wrap: wrap;
           gap: var(--space-3);
           margin-top: var(--space-5);
         }
 
-        .detail-demo-link {
+        .souq-demo-link {
           position: relative;
           display: inline-flex;
           align-items: center;
@@ -275,27 +292,27 @@ export const DemAiProject: React.FC = () => {
           gap: var(--space-2);
           min-height: 42px;
           padding: 0 var(--space-5);
-          border: 1px solid var(--color-blue);
-          background: var(--color-blue);
+          border: 1px solid var(--souq-accent);
+          background: var(--souq-accent);
           color: #fff;
           font-size: 13px;
           font-weight: 700;
         }
 
-        .detail-demo-link:hover {
+        .souq-demo-link:hover {
           color: #fff;
           background: var(--color-black);
           border-color: var(--color-black);
         }
 
-        .detail-metrics {
+        .souq-metrics {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           border: 1px solid var(--color-border);
           background: color-mix(in srgb, var(--color-bg-primary) 88%, transparent);
         }
 
-        .metric-box {
+        .souq-metric {
           min-height: 116px;
           padding: var(--space-4);
           display: flex;
@@ -306,31 +323,19 @@ export const DemAiProject: React.FC = () => {
           border-bottom: 1px solid var(--color-border-subtle);
         }
 
-        .metric-box:nth-child(2n) { border-right: none; }
-        .metric-box:nth-last-child(-n + 2) { border-bottom: none; }
+        .souq-metric:nth-child(2n) { border-right: none; }
+        .souq-metric:nth-last-child(-n + 2) { border-bottom: none; }
+        .souq-metric svg { color: var(--souq-accent); }
+        .souq-metric strong { font-family: var(--font-body); font-size: 18px; }
+        .souq-metric span { font-family: var(--font-mono); color: var(--color-text-secondary); font-size: 11px; }
 
-        .metric-box svg {
-          color: var(--color-blue);
-        }
-
-        .metric-box strong {
-          font-family: var(--font-body);
-          font-size: 18px;
-        }
-
-        .metric-box span {
-          font-family: var(--font-mono);
-          color: var(--color-text-secondary);
-          font-size: 11px;
-        }
-
-        .detail-sections {
+        .souq-sections {
           display: grid;
           gap: var(--space-5);
           margin-top: var(--space-7);
         }
 
-        .detail-section-card {
+        .souq-card {
           border: 1px solid var(--color-border);
           background: color-mix(in srgb, var(--color-bg-primary) 88%, transparent);
           padding: var(--space-6);
@@ -341,7 +346,7 @@ export const DemAiProject: React.FC = () => {
           font-size: 12px;
         }
 
-        .detail-section-card h2 {
+        .souq-card h2 {
           font-family: var(--font-body);
           font-weight: 800;
           letter-spacing: 0;
@@ -349,37 +354,37 @@ export const DemAiProject: React.FC = () => {
           margin: var(--space-2) 0 var(--space-3);
         }
 
-        .detail-section-card p {
+        .souq-card p {
           color: var(--color-text-secondary);
-          max-width: 800px;
+          max-width: 860px;
           line-height: 1.7;
         }
 
-        .tech-groups {
+        .souq-tech-groups {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-5);
           margin-top: var(--space-5);
         }
 
-        .tech-group {
+        .souq-tech-group {
           display: flex;
           flex-direction: column;
           gap: var(--space-3);
         }
 
-        .tech-label {
-          color: var(--color-blue);
+        .souq-tech-label {
+          color: var(--souq-accent);
           font-size: 12px;
         }
 
-        .tech-chips {
+        .souq-tech-chips {
           display: flex;
           flex-wrap: wrap;
           gap: 8px;
         }
 
-        .tech-chip {
+        .souq-tech-chip {
           border: 1px solid var(--color-border);
           background: var(--color-bg-tertiary);
           color: var(--color-text-secondary);
@@ -389,36 +394,35 @@ export const DemAiProject: React.FC = () => {
                       color var(--motion-medium) var(--ease-standard);
         }
 
-        .tech-chip:hover {
-          border-color: var(--color-blue);
+        .souq-tech-chip:hover {
+          border-color: var(--souq-accent);
           color: var(--color-text-primary);
         }
 
-        .screenshot-grid {
+        .souq-screenshots {
           display: grid;
+          grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
           margin-top: var(--space-5);
-          grid-template-columns: repeat(2, 1fr);
         }
 
-        .screenshot-card-item {
+        .souq-shot {
           border: 1px solid var(--color-border);
           background: var(--color-bg-tertiary);
           padding: var(--space-3);
-          transition: transform var(--motion-medium) var(--ease-standard),
-                      border-color var(--motion-medium) var(--ease-standard);
+          transition: transform var(--motion-medium) var(--ease-standard), border-color var(--motion-medium) var(--ease-standard);
         }
 
-        .screenshot-card-item:hover {
-          border-color: var(--color-blue);
+        .souq-shot:hover {
+          border-color: var(--souq-accent);
           transform: translateY(-4px);
         }
 
-        .screenshot-frame {
+        .souq-shot-frame {
           position: relative;
           width: 100%;
           aspect-ratio: 16 / 9;
-          background: #fff;
+          background: #f4f6f4;
           border: 1px solid var(--color-border-subtle);
           overflow: hidden;
           margin-bottom: var(--space-3);
@@ -427,19 +431,20 @@ export const DemAiProject: React.FC = () => {
           display: block;
         }
 
-        .screenshot-frame img {
+        .souq-shot-frame img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: top center;
           display: block;
           transition: transform var(--motion-medium) var(--ease-standard);
         }
 
-        .screenshot-frame:hover img {
+        .souq-shot-frame:hover img {
           transform: scale(1.04);
         }
 
-        .screenshot-zoom {
+        .souq-shot-zoom {
           position: absolute;
           inset: 0;
           display: flex;
@@ -454,12 +459,12 @@ export const DemAiProject: React.FC = () => {
           transition: opacity var(--motion-medium) var(--ease-standard);
         }
 
-        .screenshot-frame:hover .screenshot-zoom,
-        .screenshot-frame:focus-visible .screenshot-zoom {
+        .souq-shot-frame:hover .souq-shot-zoom,
+        .souq-shot-frame:focus-visible .souq-shot-zoom {
           opacity: 1;
         }
 
-        .screenshot-card-item h3 {
+        .souq-shot h3 {
           font-family: var(--font-body);
           font-weight: 800;
           letter-spacing: 0;
@@ -467,37 +472,37 @@ export const DemAiProject: React.FC = () => {
           margin-bottom: 4px;
         }
 
-        .screenshot-card-item p {
+        .souq-shot p {
           font-size: 13px;
           line-height: 1.5;
         }
 
         @media (max-width: 1050px) {
-          .detail-hero-grid {
+          .souq-hero-grid {
             grid-template-columns: 1fr;
           }
         }
 
         @media (max-width: 650px) {
-          .detail-hero {
+          .souq-hero {
             padding-top: var(--space-6);
           }
-          .detail-hero-grid,
-          .detail-metrics,
-          .tech-groups,
-          .screenshot-grid {
+          .souq-hero-grid,
+          .souq-metrics,
+          .souq-tech-groups,
+          .souq-screenshots {
             grid-template-columns: 1fr;
           }
-          .metric-box,
-          .metric-box:nth-child(2n),
-          .metric-box:nth-last-child(-n + 2) {
+          .souq-metric,
+          .souq-metric:nth-child(2n),
+          .souq-metric:nth-last-child(-n + 2) {
             border-right: none;
             border-bottom: 1px solid var(--color-border-subtle);
           }
-          .metric-box:last-child {
+          .souq-metric:last-child {
             border-bottom: none;
           }
-          .detail-section-card {
+          .souq-card {
             padding: var(--space-4);
           }
         }
@@ -507,7 +512,7 @@ export const DemAiProject: React.FC = () => {
 };
 
 const Metric: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({ icon, label, value }) => (
-  <div className="metric-box">
+  <div className="souq-metric">
     {icon}
     <strong>{label}</strong>
     <span>{value}</span>
@@ -515,10 +520,10 @@ const Metric: React.FC<{ icon: React.ReactNode; label: string; value: string }> 
 );
 
 const ScreenshotCard: React.FC<{ title: string; desc: string; src: string; onClick: () => void }> = ({ title, desc, src, onClick }) => (
-  <figure className="screenshot-card-item">
-    <button type="button" className="screenshot-frame" onClick={onClick} aria-label={`Expand ${title} screenshot`}>
-      <img src={src} alt={`DEM AI ${title} screenshot`} loading="lazy" />
-      <span className="screenshot-zoom">
+  <figure className="souq-shot">
+    <button type="button" className="souq-shot-frame" onClick={onClick} aria-label={`Expand ${title} screenshot`}>
+      <img src={src} alt={`SouqPro ${title} screenshot`} loading="lazy" />
+      <span className="souq-shot-zoom">
         <Maximize2 size={16} /> View
       </span>
     </button>

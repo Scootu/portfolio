@@ -45,14 +45,16 @@ export const Projects: React.FC = () => {
     },
     {
       year: '2026',
-      role: 'Portfolio System',
-      title: 'Developer Console',
-      desc: 'An interactive portfolio surface with a simulated terminal, status bar, scroll spy, theme state, and structured project storytelling.',
-      tags: ['React', 'Framer Motion', 'UX System'],
+      role: 'Full-Stack Developer',
+      title: 'SouqPro',
+      desc: 'A bilingual services marketplace connecting Algerian households with verified artisans — free client requests, provider offers, and a points-based model.',
+      tags: ['React', 'Firebase', 'Marketplace'],
       accent: 'green',
-      windowTitle: 'portfolio/home',
-      screen: 'console',
-      href: 'https://github.com/Scootu/'
+      windowTitle: 'souqpro.netlify.app',
+      screen: 'marketplace',
+      image: '/souqpro/homepage.png',
+      imageAlt: 'SouqPro services marketplace homepage',
+      href: '/projects/souqpro'
     }
   ];
 
@@ -77,7 +79,7 @@ export const Projects: React.FC = () => {
       <div className="projects-dot-field" aria-hidden="true" />
       <div className="container projects-container">
         <div className="work-heading">
-          <span className="work-number">04</span>
+          <span className="work-number">03</span>
           <div className="section-kicker font-mono">// section.work</div>
           <h2 className="section-title section-title--large">Featured Work</h2>
         </div>

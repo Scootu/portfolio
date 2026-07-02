@@ -43,6 +43,25 @@ const screenshots = [
   }
 ];
 
+const techGroups = [
+  {
+    label: '// frontend',
+    items: ['Blazor WebAssembly', 'C# / .NET', 'Component UI']
+  },
+  {
+    label: '// backend',
+    items: ['ASP.NET Core', 'CQRS + MediatR', 'FluentValidation']
+  },
+  {
+    label: '// real-time & security',
+    items: ['SignalR', 'JWT + Refresh Tokens', 'Role-based Access']
+  },
+  {
+    label: '// operations',
+    items: ['Docker', 'Seq Logging', 'PDF Export']
+  }
+];
+
 export const MechanicShopProject: React.FC = () => {
   const [activeShot, setActiveShot] = useState<LightboxImage | null>(null);
 
@@ -110,8 +129,28 @@ export const MechanicShopProject: React.FC = () => {
           </p>
         </article>
 
-        <article className="mechanic-card mechanic-card--screens">
+        <article className="mechanic-card">
           <span className="section-index font-mono">01</span>
+          <h2>Technologies</h2>
+          <p>
+            MechanicShop pairs a Blazor WebAssembly front end with an ASP.NET Core back end built on CQRS and MediatR, with real-time updates over SignalR and a containerised runtime.
+          </p>
+          <div className="tech-groups">
+            {techGroups.map((group) => (
+              <div className="tech-group" key={group.label}>
+                <span className="tech-label font-mono">{group.label}</span>
+                <div className="tech-chips">
+                  {group.items.map((item) => (
+                    <span className="tech-chip font-mono" key={item}>{item}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <article className="mechanic-card mechanic-card--screens">
+          <span className="section-index font-mono">02</span>
           <h2>Product Screenshots</h2>
           <p>
             A look at the product itself: dashboards, status-heavy work-order tables, daily schedule planning, service catalogs, and role-specific technician views.
@@ -320,6 +359,45 @@ export const MechanicShopProject: React.FC = () => {
           line-height: 1.7;
         }
 
+        .tech-groups {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: var(--space-5);
+          margin-top: var(--space-5);
+        }
+
+        .tech-group {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-3);
+        }
+
+        .tech-label {
+          color: var(--color-blue);
+          font-size: 12px;
+        }
+
+        .tech-chips {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .tech-chip {
+          border: 1px solid var(--color-border);
+          background: var(--color-bg-tertiary);
+          color: var(--color-text-secondary);
+          font-size: 12px;
+          padding: 6px 12px;
+          transition: border-color var(--motion-medium) var(--ease-standard),
+                      color var(--motion-medium) var(--ease-standard);
+        }
+
+        .tech-chip:hover {
+          border-color: var(--color-blue);
+          color: var(--color-text-primary);
+        }
+
         .mechanic-screenshots {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -409,6 +487,7 @@ export const MechanicShopProject: React.FC = () => {
           }
           .mechanic-hero-grid,
           .mechanic-metrics,
+          .tech-groups,
           .mechanic-screenshots {
             grid-template-columns: 1fr;
           }

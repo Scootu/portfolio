@@ -8,6 +8,7 @@ import { Philosophy } from './components/Philosophy';
 import { Projects } from './components/Projects';
 import { DemAiProject } from './components/DemAiProject';
 import { MechanicShopProject } from './components/MechanicShopProject';
+import { SouqProProject } from './components/SouqProProject';
 import { Services } from './components/Services';
 import { Writing } from './components/Writing';
 import { Proof } from './components/Proof';
@@ -30,6 +31,7 @@ function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const isDemAiPage = currentPath === '/projects/dem-ai';
   const isMechanicShopPage = currentPath === '/projects/mechanic-shop';
+  const isSouqProPage = currentPath === '/projects/souqpro';
   const isContactPage = currentPath === '/contact';
 
   useEffect(() => {
@@ -63,7 +65,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isDemAiPage || isMechanicShopPage || isContactPage) return;
+    if (isDemAiPage || isMechanicShopPage || isSouqProPage || isContactPage) return;
 
     const scrollToHash = () => {
       const hash = window.location.hash.replace('#', '');
@@ -85,7 +87,7 @@ function App() {
     window.setTimeout(scrollToHash, 0);
     window.addEventListener('hashchange', scrollToHash);
     return () => window.removeEventListener('hashchange', scrollToHash);
-  }, [currentPath, isContactPage, isDemAiPage, isMechanicShopPage]);
+  }, [currentPath, isContactPage, isDemAiPage, isMechanicShopPage, isSouqProPage]);
 
   // Scroll Spy Implementation
   useEffect(() => {
@@ -123,7 +125,7 @@ function App() {
       <TopNav 
         darkMode={darkMode} 
         setDarkMode={setDarkMode} 
-        activeSection={isDemAiPage || isMechanicShopPage ? 'projects' : isContactPage ? 'contact' : activeSection}
+        activeSection={isDemAiPage || isMechanicShopPage || isSouqProPage ? 'projects' : isContactPage ? 'contact' : activeSection}
       />
 
       {/* Page Content */}
@@ -150,6 +152,18 @@ function App() {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
               <MechanicShopProject />
+              <Contact />
+              <PortfolioFooter />
+            </motion.div>
+          ) : isSouqProPage ? (
+            <motion.div
+              key="souqpro"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <SouqProProject />
               <Contact />
               <PortfolioFooter />
             </motion.div>
@@ -188,7 +202,7 @@ function App() {
       </main>
 
       {/* Status Bar */}
-      <StatusBar activeSection={isDemAiPage ? 'projects/dem-ai' : isMechanicShopPage ? 'projects/mechanic-shop' : isContactPage ? 'contact' : activeSection} />
+      <StatusBar activeSection={isDemAiPage ? 'projects/dem-ai' : isMechanicShopPage ? 'projects/mechanic-shop' : isSouqProPage ? 'projects/souqpro' : isContactPage ? 'contact' : activeSection} />
     </>
   );
 }

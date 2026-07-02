@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { ArrowUpRight, CheckCircle2, Copy, Link2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowUpRight, CheckCircle2, Copy, Link2, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const email = 'anes-hamdaoui@univ-dbkm.dz';
 
@@ -12,7 +13,7 @@ const encodeForm = (data: Record<string, string>) =>
 
 export const ContactPage: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [botField, setBotField] = useState('');
   const [status, setStatus] = useState<FormStatus>('idle');
 
@@ -39,7 +40,6 @@ export const ContactPage: React.FC = () => {
       if (!response.ok) throw new Error('Request failed');
 
       setStatus('success');
-      setForm({ name: '', email: '', subject: '', message: '' });
     } catch {
       setStatus('error');
     }
@@ -54,6 +54,28 @@ export const ContactPage: React.FC = () => {
       setCopied(false);
     }
   };
+
+  const closeSuccess = () => {
+    setStatus('idle');
+    setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+  };
+
+  useEffect(() => {
+    if (status !== 'success') return;
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeSuccess();
+    };
+
+    document.addEventListener('keydown', handleKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [status]);
 
   return (
     <section className="contact-page">
@@ -141,17 +163,31 @@ export const ContactPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="contact-form__field">
-              <label htmlFor="cf-subject" className="font-mono">Subject *</label>
-              <input
-                id="cf-subject"
-                name="subject"
-                type="text"
-                required
-                placeholder="What is this about?"
-                value={form.subject}
-                onChange={updateField('subject')}
-              />
+            <div className="contact-form__row">
+              <div className="contact-form__field">
+                <label htmlFor="cf-phone" className="font-mono">Phone *</label>
+                <input
+                  id="cf-phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  placeholder="+213 ..."
+                  value={form.phone}
+                  onChange={updateField('phone')}
+                />
+              </div>
+              <div className="contact-form__field">
+                <label htmlFor="cf-subject" className="font-mono">Subject *</label>
+                <input
+                  id="cf-subject"
+                  name="subject"
+                  type="text"
+                  required
+                  placeholder="What is this about?"
+                  value={form.subject}
+                  onChange={updateField('subject')}
+                />
+              </div>
             </div>
 
             <div className="contact-form__field">
@@ -176,11 +212,6 @@ export const ContactPage: React.FC = () => {
               <ArrowUpRight size={15} />
             </button>
 
-            {status === 'success' && (
-              <p className="contact-form__status contact-form__status--ok font-mono">
-                <CheckCircle2 size={15} /> Message sent — I will get back to you soon.
-              </p>
-            )}
             {status === 'error' && (
               <p className="contact-form__status contact-form__status--err font-mono">
                 Something went wrong. Please email me directly at {email}.
@@ -277,6 +308,54 @@ export const ContactPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {status === 'success' && (
+          <motion.div
+            className="success-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={closeSuccess}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="success-title"
+          >
+            <motion.div
+              className="success-modal"
+              initial={{ opacity: 0, scale: 0.92, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 8 }}
+              transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button className="success-modal__close" onClick={closeSuccess} aria-label="Close">
+                <X size={18} />
+              </button>
+
+              <motion.span
+                className="success-modal__icon"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.12, type: 'spring', stiffness: 320, damping: 16 }}
+              >
+                <CheckCircle2 size={40} />
+              </motion.span>
+
+              <h3 id="success-title">Message sent</h3>
+              <p>
+                Thanks for reaching out{form.name ? `, ${form.name}` : ''} — your message is on its way.
+                I will get back to you within 2-3 business days.
+              </p>
+
+              <button type="button" className="success-modal__btn font-mono" onClick={closeSuccess}>
+                Done
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <style>{`
         .contact-page {
@@ -421,6 +500,96 @@ export const ContactPage: React.FC = () => {
           color: var(--color-text-secondary);
           font-size: 18px;
           line-height: 1.7;
+        }
+
+        .success-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: var(--space-5);
+          background: rgba(8, 8, 10, 0.86);
+          backdrop-filter: blur(6px);
+        }
+
+        .success-modal {
+          position: relative;
+          width: min(440px, 100%);
+          padding: var(--space-8) var(--space-7) var(--space-7);
+          text-align: center;
+          background: var(--color-bg-primary);
+          border: 1px solid var(--color-blue);
+          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+        }
+
+        .success-modal__close {
+          position: absolute;
+          top: var(--space-4);
+          right: var(--space-4);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          color: var(--color-text-tertiary);
+          border: 1px solid var(--color-border);
+          background: var(--color-bg-tertiary);
+          transition: color var(--motion-fast) var(--ease-standard),
+                      border-color var(--motion-fast) var(--ease-standard);
+        }
+
+        .success-modal__close:hover {
+          color: var(--color-text-primary);
+          border-color: var(--color-text-tertiary);
+        }
+
+        .success-modal__icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 76px;
+          height: 76px;
+          margin-bottom: var(--space-5);
+          border-radius: 50%;
+          color: var(--color-green);
+          background: var(--color-green-subtle);
+          border: 1px solid color-mix(in srgb, var(--color-green) 38%, transparent);
+        }
+
+        .success-modal h3 {
+          font-family: var(--font-body);
+          font-weight: 800;
+          letter-spacing: 0;
+          font-size: 30px;
+          color: var(--color-text-primary);
+          margin-bottom: var(--space-3);
+        }
+
+        .success-modal p {
+          color: var(--color-text-secondary);
+          font-size: 15px;
+          line-height: 1.65;
+          margin: 0 auto var(--space-6);
+          max-width: 340px;
+        }
+
+        .success-modal__btn {
+          min-height: 46px;
+          padding: 0 var(--space-7);
+          border: 1px solid var(--color-blue);
+          background: var(--color-blue);
+          color: #fff;
+          font-weight: 700;
+          font-size: 13px;
+          transition: background var(--motion-fast) var(--ease-standard),
+                      border-color var(--motion-fast) var(--ease-standard);
+        }
+
+        .success-modal__btn:hover {
+          background: var(--color-black);
+          border-color: var(--color-black);
         }
 
         .contact-form {

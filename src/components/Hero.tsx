@@ -128,7 +128,7 @@ export const Hero: React.FC = () => {
 
               <motion.div className="hero-actions" variants={itemVariants}>
                 <a 
-                  href="/Anes-hamdaoui-1.pdf" 
+                  href="/aneshamdaoui_resume.pdf"
                   download="Anes-Hamdaoui-CV.pdf"
                   className="btn-primary hero-btn"
                 >
