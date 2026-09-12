@@ -1,21 +1,14 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 export const Writing: React.FC = () => {
-  const posts = [
-    {
-      date: 'MAY 30, 2026',
-      title: 'Clean Architecture for Small Teams: What Actually Helps',
-      desc: 'Where boundaries, CQRS, and validation rules pay off in real full-stack products.',
-      tags: ['C#', 'Architecture', 'Backend']
-    },
-    {
-      date: 'APR 18, 2026',
-      title: 'Designing React Screens Around API Contracts',
-      desc: 'A practical note on keeping frontend state, request shapes, and backend rules aligned.',
-      tags: ['React', 'TypeScript', 'API']
-    }
+  const { t } = useI18n();
+  const meta = [
+    { date: 'MAY 30, 2026', tags: ['C#', 'Architecture', 'Backend'] },
+    { date: 'APR 18, 2026', tags: ['React', 'TypeScript', 'API'] }
   ];
+  const posts = meta.map((m, i) => ({ ...m, ...t.writing.posts[i] }));
 
   return (
     <section className="section-box writing-section" id="writing">
@@ -23,7 +16,7 @@ export const Writing: React.FC = () => {
         <div className="writing-heading">
           <div>
             <div className="section-kicker font-mono">// section.writing</div>
-            <h2 className="section-title section-title--large">Latest Writing</h2>
+            <h2 className="section-title section-title--large">{t.writing.title}</h2>
           </div>
           <span className="writing-number">06</span>
         </div>
@@ -42,7 +35,7 @@ export const Writing: React.FC = () => {
         </div>
 
         <div className="writing-action">
-          <a className="btn-secondary" href="#contact">Read more <ArrowUpRight size={14} /></a>
+          <a className="btn-secondary" href="#contact">{t.writing.readMore} <ArrowUpRight size={14} /></a>
         </div>
       </div>
 

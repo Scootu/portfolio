@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform, type Variants } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 type ProjectItem = {
   year: string;
@@ -17,7 +18,47 @@ type ProjectItem = {
 };
 
 export const Projects: React.FC = () => {
+  const { t } = useI18n();
   const projects: ProjectItem[] = [
+    {
+      year: '2026',
+      role: 'Full-Stack Developer',
+      title: 'Linqo',
+      desc: 'A trilingual NFC business-card SaaS — one tap opens a WhatsApp-first digital profile with links, a vCard, a catalog, and analytics. Built for Algeria in FR / EN / AR with full RTL.',
+      tags: ['Next.js 16', 'Supabase', 'NFC SaaS'],
+      accent: 'purple',
+      windowTitle: 'linqo.tech',
+      screen: 'saas',
+      image: '/linqo/02-landing-hero-desktop.png',
+      imageAlt: 'Linqo trilingual NFC card landing page',
+      href: '/projects/linqo'
+    },
+    {
+      year: '2026',
+      role: 'Full-Stack Developer',
+      title: 'Ordera',
+      desc: 'A cash-on-delivery order-automation platform that pulls orders from Shopify, YouCan and Google Sheets, confirms them in a fast call cockpit, ships to couriers, and reports live analytics.',
+      tags: ['NestJS', 'PostgreSQL', 'COD Automation'],
+      accent: 'teal',
+      windowTitle: 'ordera.app/dashboard',
+      screen: 'orders',
+      image: '/ordera/04-dashboard.png',
+      imageAlt: 'Ordera merchant dashboard preview',
+      href: '/projects/ordera'
+    },
+    {
+      year: '2026',
+      role: 'Sole Engineer',
+      title: 'Shark-32 & ARROW',
+      desc: 'A read-only gold (XAUUSD) signal-detection engine that spots Shark-32 compression breakouts, backtests them, and pushes bilingual Telegram alerts — it signals, it never auto-trades.',
+      tags: ['Python', 'FastAPI', 'Trading Signals'],
+      accent: 'amber',
+      windowTitle: 'shark32.local/dashboard',
+      screen: 'signals',
+      image: '/trading-ai/dashboard_full.png',
+      imageAlt: 'Shark-32 trading-signal detection dashboard',
+      href: '/projects/trading-system'
+    },
     {
       year: '2026',
       role: 'Full-Stack Developer',
@@ -81,7 +122,7 @@ export const Projects: React.FC = () => {
         <div className="work-heading">
           <span className="work-number">03</span>
           <div className="section-kicker font-mono">// section.work</div>
-          <h2 className="section-title section-title--large">Featured Work</h2>
+          <h2 className="section-title section-title--large">{t.projects.title}</h2>
         </div>
 
         <motion.div
@@ -97,7 +138,7 @@ export const Projects: React.FC = () => {
         </motion.div>
 
         <div className="projects-action">
-          <a href="#contact" className="btn-primary">Talk about a project</a>
+          <a href="#contact" className="btn-primary">{t.projects.cta}</a>
         </div>
       </div>
 
@@ -165,6 +206,9 @@ export const Projects: React.FC = () => {
         .work-card--blue { --work-accent: var(--color-blue); --work-soft: var(--color-blue-subtle); }
         .work-card--orange { --work-accent: var(--color-orange); --work-soft: var(--color-orange-subtle); }
         .work-card--green { --work-accent: var(--color-green); --work-soft: var(--color-green-subtle); }
+        .work-card--purple { --work-accent: var(--color-purple); --work-soft: var(--color-purple-subtle); }
+        .work-card--teal { --work-accent: var(--color-teal); --work-soft: var(--color-teal-subtle); }
+        .work-card--amber { --work-accent: var(--color-amber); --work-soft: var(--color-amber-subtle); }
 
         .work-preview {
           min-height: 280px;
@@ -432,6 +476,7 @@ const navigateToProject = (href: string) => {
 };
 
 const ProjectCard: React.FC<{ project: ProjectItem; variants: Variants }> = ({ project, variants }) => {
+  const { t } = useI18n();
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const smoothX = useSpring(pointerX, { stiffness: 180, damping: 22 });
@@ -510,7 +555,7 @@ const ProjectCard: React.FC<{ project: ProjectItem; variants: Variants }> = ({ p
             }
           }}
         >
-          View case study <ArrowUpRight size={13} />
+          {t.projects.viewCaseStudy} <ArrowUpRight size={13} />
         </a>
       </div>
     </motion.article>

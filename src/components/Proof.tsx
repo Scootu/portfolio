@@ -1,18 +1,9 @@
 import React from 'react';
+import { useI18n } from '../i18n';
 
 export const Proof: React.FC = () => {
-  const quotes = [
-    {
-      quote: 'Anes brings the kind of persistence you want on a technical product: he keeps tracing the issue until the system makes sense again.',
-      person: 'Project Collaborator',
-      role: 'Full-stack build review'
-    },
-    {
-      quote: 'He thinks about backend structure, data flow, and interface behavior together. That makes the work easier to understand and easier to extend.',
-      person: 'Peer Developer',
-      role: 'Architecture feedback'
-    }
-  ];
+  const { t } = useI18n();
+  const quotes = t.proof.quotes;
 
   return (
     <section className="section-box proof-section" id="proof">
@@ -20,7 +11,7 @@ export const Proof: React.FC = () => {
         <div className="proof-heading">
           <div>
             <div className="section-kicker font-mono">// section.proof</div>
-            <h2 className="section-title section-title--large">What Others Say</h2>
+            <h2 className="section-title section-title--large">{t.proof.title}</h2>
           </div>
           <span className="proof-number">07</span>
         </div>

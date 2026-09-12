@@ -1,28 +1,16 @@
 import React from 'react';
 import { Terminal, Database, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 export const Services: React.FC = () => {
-  const serviceList = [
-    {
-      num: '01',
-      title: 'Full-Stack Web Apps',
-      desc: 'Building cohesive, end-to-end web products. I leverage robust backend web APIs in C#/.NET and bind them with interactive, fast frontends using React and TypeScript.',
-      icon: <Cpu size={20} />
-    },
-    {
-      num: '02',
-      title: 'API & Backend Design',
-      desc: 'Architecting high-concurrency RESTful APIs under Clean Architecture guidelines, incorporating CQRS patterns with MediatR, JWT authentication, and structured logging.',
-      icon: <Terminal size={20} />
-    },
-    {
-      num: '03',
-      title: 'Database & Systems',
-      desc: 'Database modeling and query tuning in SQL Server, PostgreSQL, and MySQL. Integrating ORMs like Entity Framework Core and ensuring data integrity with strict transaction scopes.',
-      icon: <Database size={20} />
-    }
-  ];
+  const { t } = useI18n();
+  const icons = [<Cpu size={20} />, <Terminal size={20} />, <Database size={20} />];
+  const serviceList = t.services.items.map((item, i) => ({
+    num: String(i + 1).padStart(2, '0'),
+    icon: icons[i],
+    ...item
+  }));
 
   return (
     <>
@@ -31,7 +19,7 @@ export const Services: React.FC = () => {
           <div className="section-box-header">
             <div>
               <span className="section-tag">03 // capabilities</span>
-              <h2 className="section-title">Technical Offerings</h2>
+              <h2 className="section-title">{t.services.title}</h2>
             </div>
             <div className="header-meta font-mono">services_list.csv</div>
           </div>

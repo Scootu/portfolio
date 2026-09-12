@@ -9,39 +9,119 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Lightbox, type LightboxImage } from './Lightbox';
+import { useI18n, type Lang } from '../i18n';
 
-const screenshots = [
-  {
-    title: 'Manager dashboard',
-    desc: 'Operational KPIs for orders, revenue, costs, profit, completion rate, and cancellation rate.',
-    src: '/mechanicshop/manager-dashboard.png'
-  },
-  {
-    title: 'Manager work orders',
-    desc: 'Filtered work-order table with vehicle, customer, labor, repair tasks, status, and time slots.',
-    src: '/mechanicshop/manager-workorders.png'
-  },
-  {
-    title: 'Daily schedule',
-    desc: 'Workshop spot schedule with time slots and labor filtering for planning the repair day.',
-    src: '/mechanicshop/manager-schedules.png'
-  },
-  {
-    title: 'Repair services',
-    desc: 'Repair task catalog with labor/parts pricing used by work orders and invoices.',
-    src: '/mechanicshop/manager-services.png'
-  },
-  {
-    title: 'Labor dashboard',
-    desc: 'Labor role view with the same platform shaped around assigned work and progress.',
-    src: '/mechanicshop/labor-dashboard.png'
-  },
-  {
-    title: 'Labor work orders',
-    desc: 'Assigned work-order tracking for technicians without exposing manager-only operations.',
-    src: '/mechanicshop/labor-workorders.png'
-  }
+const screenshotSrcs = [
+  '/mechanicshop/manager-dashboard.png',
+  '/mechanicshop/manager-workorders.png',
+  '/mechanicshop/manager-schedules.png',
+  '/mechanicshop/manager-services.png',
+  '/mechanicshop/labor-dashboard.png',
+  '/mechanicshop/labor-workorders.png'
 ];
+
+const metricIcons = [
+  <ShieldCheck size={18} />,
+  <GitBranch size={18} />,
+  <Braces size={18} />,
+  <Box size={18} />
+];
+
+interface MechanicContent {
+  tag: string;
+  role: string;
+  summary: string;
+  demoLabel: string;
+  metrics: { label: string; value: string }[];
+  whatItIs: string;
+  techIntro: string;
+  shotsIntro: string;
+  shots: { title: string; desc: string }[];
+}
+
+const content: Record<Lang, MechanicContent> = {
+  en: {
+    tag: 'Workshop SaaS',
+    role: 'Full-Stack Workshop Management Platform',
+    summary:
+      'A role-based web application for auto repair shop operations: customers, vehicles, repair services, labor assignments, daily schedules, work orders, invoices, PDF export, and performance dashboards.',
+    demoLabel: 'Open local app',
+    metrics: [
+      { label: 'Security', value: 'JWT + refresh tokens' },
+      { label: 'Application', value: 'CQRS + MediatR' },
+      { label: 'Validation', value: 'FluentValidation' },
+      { label: 'Operations', value: 'Docker + Seq' }
+    ],
+    whatItIs:
+      'MechanicShop Workshop is designed around the real operational flow of a repair shop. Managers can create customers, vehicles, service tasks, schedules, and invoices, while labor users can view assigned work and follow work-order progress.',
+    techIntro:
+      'MechanicShop pairs a Blazor WebAssembly front end with an ASP.NET Core back end built on CQRS and MediatR, with real-time updates over SignalR and a containerised runtime.',
+    shotsIntro:
+      'A look at the product itself: dashboards, status-heavy work-order tables, daily schedule planning, service catalogs, and role-specific technician views.',
+    shots: [
+      { title: 'Manager dashboard', desc: 'Operational KPIs for orders, revenue, costs, profit, completion rate, and cancellation rate.' },
+      { title: 'Manager work orders', desc: 'Filtered work-order table with vehicle, customer, labor, repair tasks, status, and time slots.' },
+      { title: 'Daily schedule', desc: 'Workshop spot schedule with time slots and labor filtering for planning the repair day.' },
+      { title: 'Repair services', desc: 'Repair task catalog with labor/parts pricing used by work orders and invoices.' },
+      { title: 'Labor dashboard', desc: 'Labor role view with the same platform shaped around assigned work and progress.' },
+      { title: 'Labor work orders', desc: 'Assigned work-order tracking for technicians without exposing manager-only operations.' }
+    ]
+  },
+  fr: {
+    tag: 'SaaS d’atelier',
+    role: 'Plateforme full-stack de gestion d’atelier',
+    summary:
+      'Une application web basée sur les rôles pour les opérations d’un garage automobile : clients, véhicules, services de réparation, affectations de main-d’œuvre, plannings quotidiens, ordres de travail, factures, export PDF et tableaux de bord de performance.',
+    demoLabel: 'Ouvrir l’app locale',
+    metrics: [
+      { label: 'Sécurité', value: 'JWT + refresh tokens' },
+      { label: 'Application', value: 'CQRS + MediatR' },
+      { label: 'Validation', value: 'FluentValidation' },
+      { label: 'Opérations', value: 'Docker + Seq' }
+    ],
+    whatItIs:
+      'MechanicShop Workshop est pensé autour du flux opérationnel réel d’un garage. Les managers peuvent créer des clients, des véhicules, des tâches de service, des plannings et des factures, tandis que les techniciens consultent le travail qui leur est assigné et suivent l’avancement des ordres de travail.',
+    techIntro:
+      'MechanicShop associe un front end Blazor WebAssembly à un back end ASP.NET Core bâti sur CQRS et MediatR, avec des mises à jour en temps réel via SignalR et une exécution conteneurisée.',
+    shotsIntro:
+      'Un aperçu du produit lui-même : tableaux de bord, tables d’ordres de travail riches en statuts, planification quotidienne, catalogues de services et vues techniciens spécifiques aux rôles.',
+    shots: [
+      { title: 'Tableau de bord manager', desc: 'KPIs opérationnels : commandes, chiffre d’affaires, coûts, profit, taux d’achèvement et taux d’annulation.' },
+      { title: 'Ordres de travail (manager)', desc: 'Table filtrée des ordres de travail avec véhicule, client, main-d’œuvre, tâches de réparation, statut et créneaux horaires.' },
+      { title: 'Planning quotidien', desc: 'Planning des postes de l’atelier avec créneaux horaires et filtrage de la main-d’œuvre pour organiser la journée.' },
+      { title: 'Services de réparation', desc: 'Catalogue des tâches de réparation avec tarification main-d’œuvre/pièces utilisée par les ordres de travail et les factures.' },
+      { title: 'Tableau de bord technicien', desc: 'Vue rôle technicien : la même plateforme centrée sur le travail assigné et son avancement.' },
+      { title: 'Ordres de travail (technicien)', desc: 'Suivi des ordres de travail assignés aux techniciens sans exposer les opérations réservées aux managers.' }
+    ]
+  },
+  ar: {
+    tag: 'منصة ورشة SaaS',
+    role: 'منصة متكاملة لإدارة الورشة',
+    summary:
+      'تطبيق ويب قائم على الأدوار لعمليات ورشة تصليح السيارات: العملاء، والمركبات، وخدمات التصليح، وإسناد العمالة، والجداول اليومية، وأوامر العمل، والفواتير، وتصدير PDF، ولوحات الأداء.',
+    demoLabel: 'فتح التطبيق المحلي',
+    metrics: [
+      { label: 'الأمان', value: 'JWT + refresh tokens' },
+      { label: 'التطبيق', value: 'CQRS + MediatR' },
+      { label: 'التحقّق', value: 'FluentValidation' },
+      { label: 'العمليات', value: 'Docker + Seq' }
+    ],
+    whatItIs:
+      'صُمِّم MechanicShop Workshop حول سير العمل الفعلي لورشة تصليح. يستطيع المديرون إنشاء العملاء والمركبات ومهام الخدمة والجداول والفواتير، بينما يطّلع الفنّيون على العمل المُسنَد إليهم ويتابعون تقدّم أوامر العمل.',
+    techIntro:
+      'يجمع MechanicShop بين واجهة أمامية بـ Blazor WebAssembly وخلفية بـ ASP.NET Core مبنية على CQRS وMediatR، مع تحديثات فورية عبر SignalR وتشغيل داخل حاويات.',
+    shotsIntro:
+      'نظرة على المنتج نفسه: لوحات التحكّم، وجداول أوامر العمل الغنية بالحالات، وتخطيط اليوم، وكتالوجات الخدمات، وواجهات الفنّيين الخاصة بالأدوار.',
+    shots: [
+      { title: 'لوحة تحكّم المدير', desc: 'مؤشّرات تشغيلية: الطلبات، والإيرادات، والتكاليف، والأرباح، ونسبة الإنجاز، ونسبة الإلغاء.' },
+      { title: 'أوامر عمل المدير', desc: 'جدول أوامر عمل مُصفّى مع المركبة والعميل والعمالة ومهام التصليح والحالة والفترات الزمنية.' },
+      { title: 'الجدول اليومي', desc: 'جدول مواقع الورشة مع الفترات الزمنية وتصفية العمالة لتنظيم يوم التصليح.' },
+      { title: 'خدمات التصليح', desc: 'كتالوج مهام التصليح مع تسعير العمالة/القطع المستخدَم في أوامر العمل والفواتير.' },
+      { title: 'لوحة تحكّم الفنّي', desc: 'واجهة دور الفنّي: المنصة نفسها مُهيّأة حول العمل المُسنَد وتقدّمه.' },
+      { title: 'أوامر عمل الفنّي', desc: 'تتبّع أوامر العمل المُسنَدة للفنّيين دون كشف العمليات الخاصة بالمديرين.' }
+    ]
+  }
+};
 
 const techGroups = [
   {
@@ -64,6 +144,8 @@ const techGroups = [
 
 export const MechanicShopProject: React.FC = () => {
   const [activeShot, setActiveShot] = useState<LightboxImage | null>(null);
+  const { t, lang } = useI18n();
+  const c = content[lang];
 
   const handleBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -75,12 +157,12 @@ export const MechanicShopProject: React.FC = () => {
   };
 
   return (
-    <section className="mechanic-detail-page">
+    <section className="mechanic-detail-page" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <div className="mechanic-grid-bg" aria-hidden="true" />
 
       <div className="container mechanic-hero">
         <a href="/#projects" className="mechanic-back font-mono" onClick={handleBack}>
-          <ArrowLeft size={14} /> All Projects
+          <ArrowLeft size={14} /> {t.caseStudy.allProjects}
         </a>
 
         <div className="mechanic-tags font-mono">
@@ -88,17 +170,15 @@ export const MechanicShopProject: React.FC = () => {
           <span>2026</span>
           <span>ASP.NET Core</span>
           <span>Blazor WebAssembly</span>
-          <span>Workshop SaaS</span>
+          <span>{c.tag}</span>
         </div>
 
         <div className="mechanic-hero-grid">
           <div>
             <div className="section-kicker font-mono">// project.mechanicshop</div>
             <h1>MechanicShop Workshop</h1>
-            <p className="mechanic-role font-mono">Full-Stack Workshop Management Platform</p>
-            <p className="mechanic-summary">
-              A role-based web application for auto repair shop operations: customers, vehicles, repair services, labor assignments, daily schedules, work orders, invoices, PDF export, and performance dashboards.
-            </p>
+            <p className="mechanic-role font-mono">{c.role}</p>
+            <p className="mechanic-summary">{c.summary}</p>
             <div className="mechanic-actions">
               <a
                 className="mechanic-demo-link font-mono"
@@ -106,16 +186,15 @@ export const MechanicShopProject: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Open local app <ArrowUpRight size={14} />
+                {c.demoLabel} <ArrowUpRight size={14} />
               </a>
             </div>
           </div>
 
           <div className="mechanic-metrics">
-            <Metric icon={<ShieldCheck size={18} />} label="Security" value="JWT + refresh tokens" />
-            <Metric icon={<GitBranch size={18} />} label="Application" value="CQRS + MediatR" />
-            <Metric icon={<Braces size={18} />} label="Validation" value="FluentValidation" />
-            <Metric icon={<Box size={18} />} label="Operations" value="Docker + Seq" />
+            {c.metrics.map((m, i) => (
+              <Metric key={m.label} icon={metricIcons[i]} label={m.label} value={m.value} />
+            ))}
           </div>
         </div>
       </div>
@@ -123,18 +202,14 @@ export const MechanicShopProject: React.FC = () => {
       <div className="container mechanic-sections">
         <article className="mechanic-card mechanic-card--wide">
           <span className="section-index font-mono">00</span>
-          <h2>What It Is</h2>
-          <p>
-            MechanicShop Workshop is designed around the real operational flow of a repair shop. Managers can create customers, vehicles, service tasks, schedules, and invoices, while labor users can view assigned work and follow work-order progress.
-          </p>
+          <h2>{t.caseStudy.whatItIs}</h2>
+          <p>{c.whatItIs}</p>
         </article>
 
         <article className="mechanic-card">
           <span className="section-index font-mono">01</span>
-          <h2>Technologies</h2>
-          <p>
-            MechanicShop pairs a Blazor WebAssembly front end with an ASP.NET Core back end built on CQRS and MediatR, with real-time updates over SignalR and a containerised runtime.
-          </p>
+          <h2>{t.caseStudy.technologies}</h2>
+          <p>{c.techIntro}</p>
           <div className="tech-groups">
             {techGroups.map((group) => (
               <div className="tech-group" key={group.label}>
@@ -151,20 +226,20 @@ export const MechanicShopProject: React.FC = () => {
 
         <article className="mechanic-card mechanic-card--screens">
           <span className="section-index font-mono">02</span>
-          <h2>Product Screenshots</h2>
-          <p>
-            A look at the product itself: dashboards, status-heavy work-order tables, daily schedule planning, service catalogs, and role-specific technician views.
-          </p>
+          <h2>{t.caseStudy.screenshots}</h2>
+          <p>{c.shotsIntro}</p>
           <div className="mechanic-screenshots">
-            {screenshots.map((shot) => (
+            {c.shots.map((shot, i) => (
               <ScreenshotCard
                 key={shot.title}
-                {...shot}
+                title={shot.title}
+                desc={shot.desc}
+                src={screenshotSrcs[i]}
                 onClick={() =>
                   setActiveShot({
                     title: shot.title,
                     desc: shot.desc,
-                    src: shot.src,
+                    src: screenshotSrcs[i],
                     alt: `MechanicShop ${shot.title} screenshot`
                   })
                 }
@@ -243,6 +318,20 @@ export const MechanicShopProject: React.FC = () => {
           height: 12px;
           background: var(--color-text-primary);
           margin-right: var(--space-4);
+        }
+
+        .mechanic-detail-page[dir="rtl"] .mechanic-square {
+          margin-right: 0;
+          margin-left: var(--space-4);
+        }
+
+        .mechanic-detail-page[dir="rtl"] .mechanic-metric {
+          border-right: none;
+          border-left: 1px solid var(--color-border-subtle);
+        }
+
+        .mechanic-detail-page[dir="rtl"] .mechanic-metric:nth-child(2n) {
+          border-left: none;
         }
 
         .mechanic-hero-grid {
@@ -517,15 +606,18 @@ const Metric: React.FC<{ icon: React.ReactNode; label: string; value: string }> 
   </div>
 );
 
-const ScreenshotCard: React.FC<{ title: string; desc: string; src: string; onClick: () => void }> = ({ title, desc, src, onClick }) => (
-  <figure className="mechanic-shot">
-    <button type="button" className="mechanic-shot-frame" onClick={onClick} aria-label={`Expand ${title} screenshot`}>
-      <img src={src} alt={`MechanicShop ${title} screenshot`} loading="lazy" />
-      <span className="mechanic-shot-zoom">
-        <Maximize2 size={16} /> View
-      </span>
-    </button>
-    <h3>{title}</h3>
-    <p>{desc}</p>
-  </figure>
-);
+const ScreenshotCard: React.FC<{ title: string; desc: string; src: string; onClick: () => void }> = ({ title, desc, src, onClick }) => {
+  const { t } = useI18n();
+  return (
+    <figure className="mechanic-shot">
+      <button type="button" className="mechanic-shot-frame" onClick={onClick} aria-label={`Expand ${title} screenshot`}>
+        <img src={src} alt={`MechanicShop ${title} screenshot`} loading="lazy" />
+        <span className="mechanic-shot-zoom">
+          <Maximize2 size={16} /> {t.caseStudy.viewShot}
+        </span>
+      </button>
+      <h3>{title}</h3>
+      <p>{desc}</p>
+    </figure>
+  );
+};

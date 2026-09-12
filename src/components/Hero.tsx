@@ -2,10 +2,15 @@ import React from 'react';
 import { Download, ArrowRight } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
 import { HeroBackground } from './HeroBackground';
-
-const NAME = 'Anes Hamdaoui';
+import { useI18n } from '../i18n';
 
 export const Hero: React.FC = () => {
+  const { t, lang } = useI18n();
+  const name = t.hero.name;
+  const isArabic = lang === 'ar';
+  // Latin scripts reveal per-letter; Arabic is a connected script, so reveal per-word
+  // (splitting Arabic into characters would break letter-joining and reverse under RTL).
+  const nameUnits = isArabic ? name.split(' ') : name.split('');
   const techStack = [
     { label: 'C#', type: 'backend' },
     { label: 'ASP.NET Core', type: 'backend' },
@@ -95,55 +100,55 @@ export const Hero: React.FC = () => {
             >
               <motion.div className="hero-eyebrow" variants={itemVariants}>
                 <span className="badge-pill badge-pill--orange">
-                  <span className="eyebrow-dot"></span> AVAILABLE FOR OPPORTUNITIES
+                  <span className="eyebrow-dot"></span> {t.hero.badge}
                 </span>
               </motion.div>
 
               <motion.h1
                 className="hero-title"
                 variants={nameContainer}
-                aria-label={NAME}
+                aria-label={name}
+                dir={isArabic ? 'rtl' : 'ltr'}
               >
-                {NAME.split('').map((ch, i) => (
+                {nameUnits.map((unit, i) => (
                   <motion.span
-                    key={`${ch}-${i}`}
+                    key={`${unit}-${i}`}
                     className="hero-title-char"
                     variants={letterVariants}
                     aria-hidden="true"
                   >
-                    {ch === ' ' ? ' ' : ch}
+                    {unit === ' ' ? ' ' : unit}
+                    {isArabic && i < nameUnits.length - 1 ? ' ' : ''}
                   </motion.span>
                 ))}
               </motion.h1>
 
               <motion.h2 className="hero-subtitle" variants={itemVariants}>
-                Full Stack Developer <span className="subtitle-sep">//</span> Building Systems that Scale
+                {t.hero.subtitlePre} <span className="subtitle-sep">//</span> {t.hero.subtitlePost}
               </motion.h2>
 
               <motion.p className="hero-description" variants={itemVariants}>
-                I am a Full Stack Developer specializing in robust backend architectures using <strong>C#</strong>, <strong>ASP.NET Core</strong>, 
-                and <strong>Clean Architecture</strong> combined with responsive frontends built in <strong>React</strong> and <strong>TypeScript</strong>. 
-                I focus on writing clean, maintainable systems, optimization, and solving complex engineering challenges.
+                {t.hero.description}
               </motion.p>
 
               <motion.div className="hero-actions" variants={itemVariants}>
-                <a 
+                <a
                   href="/aneshamdaoui_resume.pdf"
                   download="Anes-Hamdaoui-CV.pdf"
                   className="btn-primary hero-btn"
                 >
-                  <Download size={14} /> Download CV
+                  <Download size={14} /> {t.hero.downloadCv}
                 </a>
                 <button
                   onClick={() => handleScrollToSection('projects')}
                   className="btn-secondary hero-btn"
                 >
-                  View Work <ArrowRight size={12} className="btn-arrow" />
+                  {t.hero.viewWork} <ArrowRight size={12} className="btn-arrow" />
                 </button>
               </motion.div>
 
               <motion.div className="hero-tech-container" variants={itemVariants}>
-                <span className="tech-label">CORE STACK //</span>
+                <span className="tech-label">{t.hero.coreStack} //</span>
                 <div className="tech-pills">
                   {techStack.map((tech) => (
                     <span 

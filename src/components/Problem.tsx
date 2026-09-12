@@ -1,29 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 export const Problem: React.FC = () => {
-  const issues = [
-    {
-      num: '01',
-      title: 'Features take longer than they should',
-      desc: 'Change one flow, and five other places need attention. The system starts charging interest on every new feature.'
-    },
-    {
-      num: '02',
-      title: 'Backend rules live in too many places',
-      desc: 'Validation, scheduling, permissions, and data access become hard to reason about when boundaries are unclear.'
-    },
-    {
-      num: '03',
-      title: 'Frontend and API contracts drift',
-      desc: 'Screens work until the data shape changes. Then fixes become reactive instead of designed.'
-    },
-    {
-      num: '04',
-      title: 'Performance gets noticed late',
-      desc: 'Queries, payloads, and rendering paths slowly get heavier until users feel it first.'
-    }
-  ];
+  const { t } = useI18n();
+  const issues = t.problem.issues.map((issue, i) => ({
+    num: String(i + 1).padStart(2, '0'),
+    ...issue
+  }));
 
   return (
     <section className="section-box problem-section" id="problem">
@@ -44,9 +28,9 @@ export const Problem: React.FC = () => {
 
       <div className="container problem-container">
         <div className="section-kicker font-mono">// system.problem</div>
-        <h2 className="section-title section-title--large">The Problem</h2>
+        <h2 className="section-title section-title--large">{t.problem.title}</h2>
         <p className="problem-lede">
-          Product code does not become messy all at once. It piles up quietly until every release feels slower than the last one.
+          {t.problem.lede}
         </p>
 
         <div className="problem-grid">
@@ -67,7 +51,7 @@ export const Problem: React.FC = () => {
         </div>
 
         <p className="problem-note">
-          I help turn that pressure into structure: clearer domains, cleaner APIs, predictable interfaces, and systems that are easier to keep shipping.
+          {t.problem.note}
         </p>
       </div>
 

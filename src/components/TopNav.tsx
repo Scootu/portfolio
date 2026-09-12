@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n, LANGS } from '../i18n';
 
 interface TopNavProps {
   darkMode: boolean;
@@ -8,9 +9,29 @@ interface TopNavProps {
   activeSection: string;
 }
 
+const LangSwitch: React.FC = () => {
+  const { lang, setLang } = useI18n();
+  return (
+    <div className="lang-switch" role="group" aria-label="Language">
+      {LANGS.map((l) => (
+        <button
+          key={l.code}
+          type="button"
+          className={`lang-switch__btn ${lang === l.code ? 'is-active' : ''}`}
+          onClick={() => setLang(l.code)}
+          aria-pressed={lang === l.code}
+        >
+          {l.label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
 export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSection }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useI18n();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,12 +42,12 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
   }, []);
 
   const navItems: Array<{ id: string; label: string; path?: string }> = [
-    { id: 'home', label: 'home' },
-    { id: 'about', label: 'about' },
-    { id: 'projects', label: 'work' },
-    { id: 'services', label: 'services' },
-    { id: 'writing', label: 'writing' },
-    { id: 'contact', label: 'reach out', path: '/contact' },
+    { id: 'home', label: t.nav.home },
+    { id: 'about', label: t.nav.about },
+    { id: 'projects', label: t.nav.work },
+    { id: 'services', label: t.nav.services },
+    { id: 'writing', label: t.nav.writing },
+    { id: 'contact', label: t.nav.reachOut, path: '/contact' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: { id: string; path?: string }) => {
@@ -94,6 +115,8 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
               ))}
             </ul>
 
+            <LangSwitch />
+
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="top-nav__theme-toggle"
@@ -145,6 +168,9 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
                   </li>
                 ))}
               </ul>
+              <div className="top-nav__mobile-lang">
+                <LangSwitch />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -274,6 +300,47 @@ export const TopNav: React.FC<TopNavProps> = ({ darkMode, setDarkMode, activeSec
 
         .top-nav__link.is-active::after {
           display: none;
+        }
+
+        .lang-switch {
+          display: inline-flex;
+          align-items: stretch;
+          border: 1px solid var(--color-border);
+          border-radius: 4px;
+          overflow: hidden;
+          height: 32px;
+        }
+
+        .lang-switch__btn {
+          padding: 0 9px;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          font-weight: 500;
+          color: var(--color-text-secondary);
+          border-right: 1px solid var(--color-border);
+          transition: color var(--motion-fast) var(--ease-standard),
+                      background var(--motion-fast) var(--ease-standard);
+        }
+
+        .lang-switch__btn:last-child {
+          border-right: none;
+        }
+
+        .lang-switch__btn:hover {
+          color: var(--color-text-primary);
+          background: var(--color-border-subtle);
+        }
+
+        .lang-switch__btn.is-active {
+          color: var(--color-blue);
+          background: var(--color-blue-subtle);
+          font-weight: 700;
+        }
+
+        .top-nav__mobile-lang {
+          display: flex;
+          justify-content: flex-start;
+          padding: var(--space-2) var(--container-pad) var(--space-4);
         }
 
         .top-nav__theme-toggle {

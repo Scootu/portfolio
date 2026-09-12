@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 export const About: React.FC = () => {
-  const stats = [
-    { value: 3, suffix: '+', label: 'full-stack systems', detail: 'healthcare, workflow, portfolio' },
-    { value: 8, suffix: '+', label: 'core technologies', detail: '.NET, React, SQL, Docker' },
-    { value: 90, suffix: '%', label: 'backend focus', detail: 'architecture and data flow' },
-    { value: 2026, suffix: '', label: 'computer science', detail: 'B.Sc. graduation track' }
+  const { t } = useI18n();
+  const statValues = [
+    { value: 3, suffix: '+' },
+    { value: 8, suffix: '+' },
+    { value: 90, suffix: '%' },
+    { value: 2026, suffix: '' }
   ];
+  const stats = statValues.map((v, i) => ({ ...v, ...t.about.stats[i] }));
 
   return (
     <section className="section-box about-section" id="about">
@@ -24,11 +27,11 @@ export const About: React.FC = () => {
           <span className="about-orbit" aria-hidden="true" />
           <div className="about-copy">
             <div className="section-kicker font-mono">// section.about</div>
-            <h2 className="section-title section-title--large">Who I Am</h2>
+            <h2 className="section-title section-title--large">{t.about.title}</h2>
             <p>
-              I build full-stack systems with clear backend rules, practical database design, and React interfaces that stay fast enough to feel calm. I like turning messy product logic into code your team can actually reason about.
+              {t.about.body}
             </p>
-            <a className="about-link font-mono" href="#contact">More about me <ArrowUpRight size={14} /></a>
+            <a className="about-link font-mono" href="#contact"><span>{t.about.moreAboutMe}</span> <ArrowUpRight size={14} /></a>
           </div>
 
           <div className="about-stats">

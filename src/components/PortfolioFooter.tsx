@@ -1,6 +1,8 @@
 import React from 'react';
+import { useI18n } from '../i18n';
 
 export const PortfolioFooter: React.FC = () => {
+  const { t } = useI18n();
   return (
     <footer className="portfolio-footer">
       <div className="footer-lines" aria-hidden="true">
@@ -15,19 +17,19 @@ export const PortfolioFooter: React.FC = () => {
           <span>H</span>
         </div>
         <h2>ANES HAMDAOUI</h2>
-        <p className="font-mono">built with structure. tuned for momentum.</p>
+        <p className="font-mono">{t.footer.tagline}</p>
 
         <div className="footer-links font-mono">
-          <a href="#home">home</a>
-          <a href="#about">about</a>
-          <a href="#projects">work</a>
-          <a href="#services">services</a>
-          <a href="#writing">writing</a>
-          <a href="#contact">contact</a>
+          <a href="#home">{t.footer.links.home}</a>
+          <a href="#about">{t.footer.links.about}</a>
+          <a href="#projects">{t.footer.links.work}</a>
+          <a href="#services">{t.footer.links.services}</a>
+          <a href="#writing">{t.footer.links.writing}</a>
+          <a href="#contact">{t.footer.links.contact}</a>
         </div>
 
         <div className="footer-bottom font-mono">
-          <span>Made in Algeria //</span>
+          <span>{t.footer.madeIn}</span>
           <span>portfolio.{new Date().getFullYear()}</span>
         </div>
       </div>

@@ -73,8 +73,9 @@ export const Lightbox: React.FC<LightboxProps> = ({ image, onClose }) => {
           inset: 0;
           z-index: 1000;
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
+          overflow-y: auto;
           padding: clamp(var(--space-4), 5vw, var(--space-8));
           background: rgba(8, 8, 10, 0.86);
           backdrop-filter: blur(6px);
@@ -102,18 +103,18 @@ export const Lightbox: React.FC<LightboxProps> = ({ image, onClose }) => {
         }
 
         .lightbox-figure {
-          margin: 0;
+          margin: auto;
           display: flex;
           flex-direction: column;
-          max-width: min(1200px, 100%);
-          max-height: 100%;
+          align-items: center;
+          width: min(1040px, 100%);
         }
 
         .lightbox-figure img {
           display: block;
+          width: auto;
           max-width: 100%;
-          max-height: calc(100vh - 160px);
-          object-fit: contain;
+          height: auto;
           background: #fff;
           border: 1px solid rgba(255, 255, 255, 0.14);
           box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);

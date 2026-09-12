@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowUpRight, CheckCircle2, Copy, Link2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 const email = 'anes-hamdaoui@univ-dbkm.dz';
 
@@ -12,6 +13,7 @@ const encodeForm = (data: Record<string, string>) =>
     .join('&');
 
 export const ContactPage: React.FC = () => {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [botField, setBotField] = useState('');
@@ -85,14 +87,14 @@ export const ContactPage: React.FC = () => {
 
         <div className="container contact-page__inner">
           <div className="section-kicker font-mono">// page.contact</div>
-          <h1>Contact</h1>
+          <h1>{t.contactPage.title}</h1>
           <p className="contact-page__intro">
-            I read every message. I will get back to you within 2-3 business days.
+            {t.contactPage.intro}
           </p>
 
           <div className="contact-page__availability font-mono">
             <span />
-            Limited availability - accepting select projects for 2026
+            {t.contactPage.availability}
           </div>
 
           <div className="contact-page__console font-mono" aria-label="Connection status">
@@ -108,9 +110,9 @@ export const ContactPage: React.FC = () => {
         <div className="container contact-page__inner">
           <span className="contact-page__number" aria-hidden="true">02</span>
           <div className="section-kicker font-mono">// section.reach</div>
-          <h2>How to Reach Me</h2>
+          <h2>{t.contactPage.reachTitle}</h2>
           <p className="contact-page__lede">
-            Email works best. Tell me what is going on and I will take it from there.
+            {t.contactPage.reachLede}
           </p>
 
           <form
@@ -135,28 +137,28 @@ export const ContactPage: React.FC = () => {
               </label>
             </p>
 
-            <p className="contact-form__title font-mono">Send a message</p>
+            <p className="contact-form__title font-mono">{t.contactPage.formTitle}</p>
 
             <div className="contact-form__row">
               <div className="contact-form__field">
-                <label htmlFor="cf-name" className="font-mono">Name</label>
+                <label htmlFor="cf-name" className="font-mono">{t.contactPage.name}</label>
                 <input
                   id="cf-name"
                   name="name"
                   type="text"
-                  placeholder="Your name"
+                  placeholder={t.contactPage.namePlaceholder}
                   value={form.name}
                   onChange={updateField('name')}
                 />
               </div>
               <div className="contact-form__field">
-                <label htmlFor="cf-email" className="font-mono">Your email *</label>
+                <label htmlFor="cf-email" className="font-mono">{t.contactPage.email}</label>
                 <input
                   id="cf-email"
                   name="email"
                   type="email"
                   required
-                  placeholder="you@example.com"
+                  placeholder={t.contactPage.emailPlaceholder}
                   value={form.email}
                   onChange={updateField('email')}
                 />
@@ -165,25 +167,25 @@ export const ContactPage: React.FC = () => {
 
             <div className="contact-form__row">
               <div className="contact-form__field">
-                <label htmlFor="cf-phone" className="font-mono">Phone *</label>
+                <label htmlFor="cf-phone" className="font-mono">{t.contactPage.phone}</label>
                 <input
                   id="cf-phone"
                   name="phone"
                   type="tel"
                   required
-                  placeholder="+213 ..."
+                  placeholder={t.contactPage.phonePlaceholder}
                   value={form.phone}
                   onChange={updateField('phone')}
                 />
               </div>
               <div className="contact-form__field">
-                <label htmlFor="cf-subject" className="font-mono">Subject *</label>
+                <label htmlFor="cf-subject" className="font-mono">{t.contactPage.subject}</label>
                 <input
                   id="cf-subject"
                   name="subject"
                   type="text"
                   required
-                  placeholder="What is this about?"
+                  placeholder={t.contactPage.subjectPlaceholder}
                   value={form.subject}
                   onChange={updateField('subject')}
                 />
@@ -191,13 +193,13 @@ export const ContactPage: React.FC = () => {
             </div>
 
             <div className="contact-form__field">
-              <label htmlFor="cf-message" className="font-mono">Message *</label>
+              <label htmlFor="cf-message" className="font-mono">{t.contactPage.message}</label>
               <textarea
                 id="cf-message"
                 name="message"
                 rows={5}
                 required
-                placeholder="Tell me what you are building..."
+                placeholder={t.contactPage.messagePlaceholder}
                 value={form.message}
                 onChange={updateField('message')}
               />
@@ -208,13 +210,13 @@ export const ContactPage: React.FC = () => {
               className="contact-form__submit font-mono"
               disabled={status === 'sending'}
             >
-              {status === 'sending' ? 'Sending...' : 'Send message'}
+              {status === 'sending' ? t.contactPage.sending : t.contactPage.send}
               <ArrowUpRight size={15} />
             </button>
 
             {status === 'error' && (
               <p className="contact-form__status contact-form__status--err font-mono">
-                Something went wrong. Please email me directly at {email}.
+                {t.contactPage.error} {email}.
               </p>
             )}
           </form>
@@ -227,10 +229,10 @@ export const ContactPage: React.FC = () => {
                 <span />
                 <span />
               </div>
-              <p className="contact-method__label font-mono">Email (Preferred)</p>
+              <p className="contact-method__label font-mono">{t.contactPage.emailPreferred}</p>
               <h3>{email}</h3>
               <a href={`mailto:${email}`} className="contact-method__link font-mono">
-                Send email
+                {t.contactPage.sendEmail}
                 <ArrowUpRight size={14} />
               </a>
               <button
@@ -241,7 +243,7 @@ export const ContactPage: React.FC = () => {
                 title="Copy email"
               >
                 {copied ? <CheckCircle2 size={15} /> : <Copy size={15} />}
-                <span>{copied ? 'copied' : 'copy'}</span>
+                <span>{copied ? t.contactPage.copied : t.contactPage.copy}</span>
               </button>
             </article>
 
@@ -249,7 +251,7 @@ export const ContactPage: React.FC = () => {
               <div className="contact-method__icon" aria-hidden="true">
                 <Link2 size={28} />
               </div>
-              <p className="contact-method__label font-mono">LinkedIn</p>
+              <p className="contact-method__label font-mono">{t.contactPage.linkedin}</p>
               <h3>linkedin.com/in/anes-hamdaoui</h3>
               <a
                 href="https://linkedin.com/in/anes-hamdaoui-8239a8216"
@@ -257,7 +259,7 @@ export const ContactPage: React.FC = () => {
                 rel="noopener noreferrer"
                 className="contact-method__link font-mono"
               >
-                View profile
+                {t.contactPage.viewProfile}
                 <ArrowUpRight size={14} />
               </a>
             </article>
@@ -266,15 +268,15 @@ export const ContactPage: React.FC = () => {
               <div className="contact-method__icon" aria-hidden="true">
                 <Link2 size={28} />
               </div>
-              <p className="contact-method__label font-mono">All Links</p>
-              <h3>GitHub, projects, and more</h3>
+              <p className="contact-method__label font-mono">{t.contactPage.allLinks}</p>
+              <h3>{t.contactPage.allLinksValue}</h3>
               <a
                 href="https://github.com/Scootu/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contact-method__link font-mono"
               >
-                View all
+                {t.contactPage.viewAll}
                 <ArrowUpRight size={14} />
               </a>
             </article>
@@ -287,24 +289,16 @@ export const ContactPage: React.FC = () => {
         <div className="container contact-page__inner">
           <span className="contact-page__number contact-page__number--low" aria-hidden="true">03</span>
           <div className="section-kicker font-mono">// section.process</div>
-          <h2>What Happens Next</h2>
+          <h2>{t.contactPage.processTitle}</h2>
 
           <div className="contact-process">
-            <article className="contact-process__step">
-              <span className="font-mono">01</span>
-              <h3>I review and respond</h3>
-              <p>I will get back to you within 2-3 business days with my thoughts or a few questions.</p>
-            </article>
-            <article className="contact-process__step">
-              <span className="font-mono">02</span>
-              <h3>We schedule a call</h3>
-              <p>If it looks like a fit, we hop on a 30-minute call to talk it through.</p>
-            </article>
-            <article className="contact-process__step">
-              <span className="font-mono">03</span>
-              <h3>Proposal or referral</h3>
-              <p>I will send a proposal if we are a match. If not, I will point you somewhere that makes more sense.</p>
-            </article>
+            {t.contactPage.steps.map((step, i) => (
+              <article className="contact-process__step" key={step.title}>
+                <span className="font-mono">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </article>
+            ))}
           </div>
         </div>
       </div>
@@ -343,14 +337,13 @@ export const ContactPage: React.FC = () => {
                 <CheckCircle2 size={40} />
               </motion.span>
 
-              <h3 id="success-title">Message sent</h3>
+              <h3 id="success-title">{t.contactPage.successTitle}</h3>
               <p>
-                Thanks for reaching out{form.name ? `, ${form.name}` : ''} — your message is on its way.
-                I will get back to you within 2-3 business days.
+                {t.contactPage.successThanks}{form.name ? `, ${form.name}` : ''} — {t.contactPage.successRest}
               </p>
 
               <button type="button" className="success-modal__btn font-mono" onClick={closeSuccess}>
-                Done
+                {t.contactPage.done}
               </button>
             </motion.div>
           </motion.div>

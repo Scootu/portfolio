@@ -1,31 +1,20 @@
 import React from 'react';
 import { ShieldAlert, Zap, Cpu } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 export const Philosophy: React.FC = () => {
-  const principles = [
-    {
-      num: '01',
-      tag: 'SYSTEM DESIGN',
-      title: 'Clean Architecture & SOLID',
-      desc: 'Advocate for clean code principles. I structure backend applications using Clean Architecture and DDD (Domain Driven Design), ensuring separation of concerns, complete testability, and painless maintenance.',
-      icon: <Cpu className="principle-icon" size={24} />
-    },
-    {
-      num: '02',
-      tag: 'API ENGINEERING',
-      title: 'Performance & Optimization',
-      desc: 'Optimizing data access paths using EF Core, specialized database schemas, CQRS with MediatR, caching, and robust security protocols like JWT authentication and role-based access control.',
-      icon: <Zap className="principle-icon" size={24} />
-    },
-    {
-      num: '03',
-      tag: 'PRODUCT EXECUTION',
-      title: 'Reliability & Extensibility',
-      desc: 'Writing code that is meant to grow. Designing systems with scheduling conflict prevention, validating core business rules, preventing double-bookings, and ensuring fail-safe deployments via Docker.',
-      icon: <ShieldAlert className="principle-icon" size={24} />
-    }
+  const { t } = useI18n();
+  const icons = [
+    <Cpu className="principle-icon" size={24} />,
+    <Zap className="principle-icon" size={24} />,
+    <ShieldAlert className="principle-icon" size={24} />
   ];
+  const principles = t.philosophy.principles.map((p, i) => ({
+    num: String(i + 1).padStart(2, '0'),
+    icon: icons[i],
+    ...p
+  }));
 
   const containerVariants: Variants = {
     hidden: {},
@@ -52,7 +41,7 @@ export const Philosophy: React.FC = () => {
           <div className="section-box-header">
             <div>
               <span className="section-tag">01 // philosophy</span>
-              <h2 className="section-title">Thinking In Systems</h2>
+              <h2 className="section-title">{t.philosophy.title}</h2>
             </div>
             <div className="header-meta font-mono">core_principles.log</div>
           </div>

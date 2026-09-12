@@ -9,6 +9,9 @@ import { Projects } from './components/Projects';
 import { DemAiProject } from './components/DemAiProject';
 import { MechanicShopProject } from './components/MechanicShopProject';
 import { SouqProProject } from './components/SouqProProject';
+import { LinqoProject } from './components/LinqoProject';
+import { OrderaProject } from './components/OrderaProject';
+import { TradingAiProject } from './components/TradingAiProject';
 import { Services } from './components/Services';
 import { Writing } from './components/Writing';
 import { Proof } from './components/Proof';
@@ -32,7 +35,12 @@ function App() {
   const isDemAiPage = currentPath === '/projects/dem-ai';
   const isMechanicShopPage = currentPath === '/projects/mechanic-shop';
   const isSouqProPage = currentPath === '/projects/souqpro';
+  const isLinqoPage = currentPath === '/projects/linqo';
+  const isOrderaPage = currentPath === '/projects/ordera';
+  const isTradingPage = currentPath === '/projects/trading-system';
   const isContactPage = currentPath === '/contact';
+  const isProjectDetailPage =
+    isDemAiPage || isMechanicShopPage || isSouqProPage || isLinqoPage || isOrderaPage || isTradingPage;
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
@@ -65,7 +73,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isDemAiPage || isMechanicShopPage || isSouqProPage || isContactPage) return;
+    if (isProjectDetailPage || isContactPage) return;
 
     const scrollToHash = () => {
       const hash = window.location.hash.replace('#', '');
@@ -87,7 +95,7 @@ function App() {
     window.setTimeout(scrollToHash, 0);
     window.addEventListener('hashchange', scrollToHash);
     return () => window.removeEventListener('hashchange', scrollToHash);
-  }, [currentPath, isContactPage, isDemAiPage, isMechanicShopPage, isSouqProPage]);
+  }, [currentPath, isContactPage, isProjectDetailPage]);
 
   // Scroll Spy Implementation
   useEffect(() => {
@@ -122,10 +130,10 @@ function App() {
       <div className="scanlines-overlay" />
 
       {/* Navigation */}
-      <TopNav 
-        darkMode={darkMode} 
-        setDarkMode={setDarkMode} 
-        activeSection={isDemAiPage || isMechanicShopPage || isSouqProPage ? 'projects' : isContactPage ? 'contact' : activeSection}
+      <TopNav
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        activeSection={isProjectDetailPage ? 'projects' : isContactPage ? 'contact' : activeSection}
       />
 
       {/* Page Content */}
@@ -167,6 +175,42 @@ function App() {
               <Contact />
               <PortfolioFooter />
             </motion.div>
+          ) : isLinqoPage ? (
+            <motion.div
+              key="linqo"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <LinqoProject />
+              <Contact />
+              <PortfolioFooter />
+            </motion.div>
+          ) : isOrderaPage ? (
+            <motion.div
+              key="ordera"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <OrderaProject />
+              <Contact />
+              <PortfolioFooter />
+            </motion.div>
+          ) : isTradingPage ? (
+            <motion.div
+              key="trading-system"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <TradingAiProject />
+              <Contact />
+              <PortfolioFooter />
+            </motion.div>
           ) : isContactPage ? (
             <motion.div
               key="contact"
@@ -202,7 +246,7 @@ function App() {
       </main>
 
       {/* Status Bar */}
-      <StatusBar activeSection={isDemAiPage ? 'projects/dem-ai' : isMechanicShopPage ? 'projects/mechanic-shop' : isSouqProPage ? 'projects/souqpro' : isContactPage ? 'contact' : activeSection} />
+      <StatusBar activeSection={isDemAiPage ? 'projects/dem-ai' : isMechanicShopPage ? 'projects/mechanic-shop' : isSouqProPage ? 'projects/souqpro' : isLinqoPage ? 'projects/linqo' : isOrderaPage ? 'projects/ordera' : isTradingPage ? 'projects/trading-system' : isContactPage ? 'contact' : activeSection} />
     </>
   );
 }

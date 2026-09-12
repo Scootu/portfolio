@@ -9,34 +9,108 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Lightbox, type LightboxImage } from './Lightbox';
+import { useI18n, type Lang } from '../i18n';
 
-const productScreenshots = [
-  {
-    title: 'Patient portal',
-    desc: 'Verified patient access entry point through NIN lookup.',
-    src: '/demai/patient-portal.webp'
-  },
-  {
-    title: 'Doctor appointments',
-    desc: 'Calendar planning with daily appointment limits and selected-day details.',
-    src: '/demai/appointments-calendar.webp'
-  },
-  {
-    title: 'Prescription builder',
-    desc: 'Medication list, diagnosis text, and generated prescription preview.',
-    src: '/demai/prescription-builder.webp'
-  },
-  {
-    title: 'Pharmacy stock',
-    desc: 'Stock and family-drug management for pharmacist workflows.',
-    src: '/demai/stock-management.webp'
-  },
-  {
-    title: 'Medication history',
-    desc: 'Patient medication history table with doctor, enterprise, and diagnosis labels.',
-    src: '/demai/medication-history.webp'
-  }
+const screenshotSrcs = [
+  '/demai/patient-portal.webp',
+  '/demai/appointments-calendar.webp',
+  '/demai/prescription-builder.webp',
+  '/demai/stock-management.webp',
+  '/demai/medication-history.webp'
 ];
+
+const metricIcons = [
+  <ShieldCheck size={18} />,
+  <GitBranch size={18} />,
+  <CheckCircle2 size={18} />,
+  <FileCode2 size={18} />
+];
+
+interface DemContent {
+  tag: string;
+  role: string;
+  summary: string;
+  demoLabel: string;
+  metrics: { label: string; value: string }[];
+  techIntro: string;
+  shotsIntro: string;
+  shots: { title: string; desc: string }[];
+}
+
+const content: Record<Lang, DemContent> = {
+  en: {
+    tag: 'Healthcare SaaS',
+    role: 'Full-Stack Healthcare Platform',
+    summary:
+      'A medical ecosystem connecting patients, physicians, and pharmacies — appointment scheduling, prescriptions, medication history, and pharmacy stock management in one platform.',
+    demoLabel: 'Open live demo',
+    metrics: [
+      { label: 'Security', value: 'JWT + role policies' },
+      { label: 'Application', value: 'CQRS handlers' },
+      { label: 'Outcome Flow', value: 'Result Pattern' },
+      { label: 'Validation', value: 'FluentValidation' }
+    ],
+    techIntro:
+      'DEM AI pairs a React front end with an ASP.NET Core back end organised around Clean Architecture, keeping request handling, validation, and security concerns cleanly separated.',
+    shotsIntro:
+      'A look at the product itself: patient access, doctor scheduling, prescriptions, medication history, and pharmacist stock management.',
+    shots: [
+      { title: 'Patient portal', desc: 'Verified patient access entry point through NIN lookup.' },
+      { title: 'Doctor appointments', desc: 'Calendar planning with daily appointment limits and selected-day details.' },
+      { title: 'Prescription builder', desc: 'Medication list, diagnosis text, and generated prescription preview.' },
+      { title: 'Pharmacy stock', desc: 'Stock and family-drug management for pharmacist workflows.' },
+      { title: 'Medication history', desc: 'Patient medication history table with doctor, enterprise, and diagnosis labels.' }
+    ]
+  },
+  fr: {
+    tag: 'SaaS de santé',
+    role: 'Plateforme de santé full-stack',
+    summary:
+      'Un écosystème médical qui relie patients, médecins et pharmacies — prise de rendez-vous, ordonnances, historique des médicaments et gestion du stock de pharmacie sur une seule plateforme.',
+    demoLabel: 'Ouvrir la démo',
+    metrics: [
+      { label: 'Sécurité', value: 'JWT + politiques de rôles' },
+      { label: 'Application', value: 'Handlers CQRS' },
+      { label: 'Flux de résultat', value: 'Result Pattern' },
+      { label: 'Validation', value: 'FluentValidation' }
+    ],
+    techIntro:
+      'DEM AI associe un front end React à un back end ASP.NET Core organisé selon la Clean Architecture, en gardant la gestion des requêtes, la validation et la sécurité proprement séparées.',
+    shotsIntro:
+      'Un aperçu du produit lui-même : accès patient, planification médecin, ordonnances, historique des médicaments et gestion du stock côté pharmacien.',
+    shots: [
+      { title: 'Portail patient', desc: 'Point d’accès patient vérifié via une recherche par NIN.' },
+      { title: 'Rendez-vous médecin', desc: 'Planification par calendrier avec limites quotidiennes de rendez-vous et détails du jour sélectionné.' },
+      { title: 'Générateur d’ordonnances', desc: 'Liste de médicaments, texte de diagnostic et aperçu de l’ordonnance générée.' },
+      { title: 'Stock de pharmacie', desc: 'Gestion du stock et des familles de médicaments pour les flux du pharmacien.' },
+      { title: 'Historique des médicaments', desc: 'Tableau d’historique des médicaments du patient avec médecin, établissement et diagnostic.' }
+    ]
+  },
+  ar: {
+    tag: 'منصة صحّية SaaS',
+    role: 'منصة رعاية صحّية متكاملة',
+    summary:
+      'منظومة طبية تربط المرضى والأطبّاء والصيدليات — حجز المواعيد، والوصفات الطبية، وتاريخ الأدوية، وإدارة مخزون الصيدلية في منصّة واحدة.',
+    demoLabel: 'فتح العرض التجريبي',
+    metrics: [
+      { label: 'الأمان', value: 'JWT + سياسات الأدوار' },
+      { label: 'التطبيق', value: 'معالجات CQRS' },
+      { label: 'مسار النتيجة', value: 'Result Pattern' },
+      { label: 'التحقّق', value: 'FluentValidation' }
+    ],
+    techIntro:
+      'يجمع DEM AI بين واجهة أمامية بـ React وخلفية بـ ASP.NET Core مبنية وفق Clean Architecture، مع فصل واضح بين معالجة الطلبات والتحقّق والأمان.',
+    shotsIntro:
+      'نظرة على المنتج نفسه: وصول المريض، وجدولة الطبيب، والوصفات، وتاريخ الأدوية، وإدارة المخزون لدى الصيدلي.',
+    shots: [
+      { title: 'بوابة المريض', desc: 'نقطة دخول مريض مُوثَّق عبر البحث برقم NIN.' },
+      { title: 'مواعيد الطبيب', desc: 'تخطيط بالتقويم مع حدود يومية للمواعيد وتفاصيل اليوم المحدَّد.' },
+      { title: 'مُنشئ الوصفات', desc: 'قائمة أدوية، ونصّ تشخيص، ومعاينة للوصفة المولَّدة.' },
+      { title: 'مخزون الصيدلية', desc: 'إدارة المخزون وعائلات الأدوية لسير عمل الصيدلي.' },
+      { title: 'تاريخ الأدوية', desc: 'جدول تاريخ أدوية المريض مع الطبيب والمؤسسة والتشخيص.' }
+    ]
+  }
+};
 
 const techGroups = [
   {
@@ -59,6 +133,8 @@ const techGroups = [
 
 export const DemAiProject: React.FC = () => {
   const [activeShot, setActiveShot] = useState<LightboxImage | null>(null);
+  const { t, lang } = useI18n();
+  const c = content[lang];
 
   const handleBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -70,29 +146,27 @@ export const DemAiProject: React.FC = () => {
   };
 
   return (
-    <section className="project-detail-page">
+    <section className="project-detail-page" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <div className="detail-grid-bg" aria-hidden="true" />
 
       <div className="container detail-hero">
         <a href="/#projects" className="detail-back font-mono" onClick={handleBack}>
-          <ArrowLeft size={14} /> All Projects
+          <ArrowLeft size={14} /> {t.caseStudy.allProjects}
         </a>
 
         <div className="detail-tags font-mono">
           <span className="detail-square" />
           <span>2026</span>
           <span>ASP.NET Core</span>
-          <span>Healthcare SaaS</span>
+          <span>{c.tag}</span>
         </div>
 
         <div className="detail-hero-grid">
           <div>
             <div className="section-kicker font-mono">// project.dem-ai</div>
             <h1>DEM AI</h1>
-            <p className="detail-role font-mono">Full-Stack Healthcare Platform</p>
-            <p className="detail-summary">
-              A medical ecosystem connecting patients, physicians, and pharmacies — appointment scheduling, prescriptions, medication history, and pharmacy stock management in one platform.
-            </p>
+            <p className="detail-role font-mono">{c.role}</p>
+            <p className="detail-summary">{c.summary}</p>
             <div className="detail-actions">
               <a
                 className="detail-demo-link font-mono"
@@ -100,16 +174,15 @@ export const DemAiProject: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Open live demo <ArrowUpRight size={14} />
+                {c.demoLabel} <ArrowUpRight size={14} />
               </a>
             </div>
           </div>
 
           <div className="detail-metrics">
-            <Metric icon={<ShieldCheck size={18} />} label="Security" value="JWT + role policies" />
-            <Metric icon={<GitBranch size={18} />} label="Application" value="CQRS handlers" />
-            <Metric icon={<CheckCircle2 size={18} />} label="Outcome Flow" value="Result Pattern" />
-            <Metric icon={<FileCode2 size={18} />} label="Validation" value="FluentValidation" />
+            {c.metrics.map((m, i) => (
+              <Metric key={m.label} icon={metricIcons[i]} label={m.label} value={m.value} />
+            ))}
           </div>
         </div>
       </div>
@@ -117,10 +190,8 @@ export const DemAiProject: React.FC = () => {
       <div className="container detail-sections">
         <article className="detail-section-card">
           <span className="section-index font-mono">01</span>
-          <h2>Technologies</h2>
-          <p>
-            DEM AI pairs a React front end with an ASP.NET Core back end organised around Clean Architecture, keeping request handling, validation, and security concerns cleanly separated.
-          </p>
+          <h2>{t.caseStudy.technologies}</h2>
+          <p>{c.techIntro}</p>
           <div className="tech-groups">
             {techGroups.map((group) => (
               <div className="tech-group" key={group.label}>
@@ -137,20 +208,20 @@ export const DemAiProject: React.FC = () => {
 
         <article className="detail-section-card screenshot-card">
           <span className="section-index font-mono">02</span>
-          <h2>Product Screenshots</h2>
-          <p>
-            A look at the product itself: patient access, doctor scheduling, prescriptions, medication history, and pharmacist stock management.
-          </p>
+          <h2>{t.caseStudy.screenshots}</h2>
+          <p>{c.shotsIntro}</p>
           <div className="screenshot-grid">
-            {productScreenshots.map((shot) => (
+            {c.shots.map((shot, i) => (
               <ScreenshotCard
                 key={shot.title}
-                {...shot}
+                title={shot.title}
+                desc={shot.desc}
+                src={screenshotSrcs[i]}
                 onClick={() =>
                   setActiveShot({
                     title: shot.title,
                     desc: shot.desc,
-                    src: shot.src,
+                    src: screenshotSrcs[i],
                     alt: `DEM AI ${shot.title} screenshot`
                   })
                 }
@@ -229,6 +300,20 @@ export const DemAiProject: React.FC = () => {
           height: 12px;
           background: var(--color-text-primary);
           margin-right: var(--space-4);
+        }
+
+        .project-detail-page[dir="rtl"] .detail-square {
+          margin-right: 0;
+          margin-left: var(--space-4);
+        }
+
+        .project-detail-page[dir="rtl"] .metric-box {
+          border-right: none;
+          border-left: 1px solid var(--color-border-subtle);
+        }
+
+        .project-detail-page[dir="rtl"] .metric-box:nth-child(2n) {
+          border-left: none;
         }
 
         .detail-hero-grid {
@@ -514,15 +599,18 @@ const Metric: React.FC<{ icon: React.ReactNode; label: string; value: string }> 
   </div>
 );
 
-const ScreenshotCard: React.FC<{ title: string; desc: string; src: string; onClick: () => void }> = ({ title, desc, src, onClick }) => (
-  <figure className="screenshot-card-item">
-    <button type="button" className="screenshot-frame" onClick={onClick} aria-label={`Expand ${title} screenshot`}>
-      <img src={src} alt={`DEM AI ${title} screenshot`} loading="lazy" />
-      <span className="screenshot-zoom">
-        <Maximize2 size={16} /> View
-      </span>
-    </button>
-    <h3>{title}</h3>
-    <p>{desc}</p>
-  </figure>
-);
+const ScreenshotCard: React.FC<{ title: string; desc: string; src: string; onClick: () => void }> = ({ title, desc, src, onClick }) => {
+  const { t } = useI18n();
+  return (
+    <figure className="screenshot-card-item">
+      <button type="button" className="screenshot-frame" onClick={onClick} aria-label={`Expand ${title} screenshot`}>
+        <img src={src} alt={`DEM AI ${title} screenshot`} loading="lazy" />
+        <span className="screenshot-zoom">
+          <Maximize2 size={16} /> {t.caseStudy.viewShot}
+        </span>
+      </button>
+      <h3>{title}</h3>
+      <p>{desc}</p>
+    </figure>
+  );
+};

@@ -1,7 +1,9 @@
 import React from 'react';
 import { ArrowUpRight, Mail } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 export const Contact: React.FC = () => {
+  const { t } = useI18n();
   return (
     <section className="section-box contact-section" id="contact">
       <div className="contact-dot-field" aria-hidden="true" />
@@ -14,23 +16,23 @@ export const Contact: React.FC = () => {
           <span />
         </div>
 
-        <h2>Let's Talk</h2>
-        <p>I am open to developer roles, collaborations, and projects that need clear backend structure with a polished React frontend.</p>
+        <h2>{t.contact.title}</h2>
+        <p>{t.contact.body}</p>
 
         <div className="availability font-mono">
-          <span /> Limited availability - accepting select projects for 2026
+          <span /> {t.contact.availability}
         </div>
 
         <a className="contact-cta" href="mailto:anes-hamdaoui@univ-dbkm.dz">
           <Mail size={18} />
-          Tell me what you are building
+          {t.contact.cta}
           <ArrowUpRight size={18} />
         </a>
 
         <div className="contact-links font-mono">
           <a href="https://github.com/Scootu/" target="_blank" rel="noopener noreferrer">github</a>
           <a href="https://linkedin.com/in/anes-hamdaoui-8239a8216" target="_blank" rel="noopener noreferrer">linkedin</a>
-          <span>Algeria</span>
+          <span>{t.contact.location}</span>
         </div>
       </div>
 

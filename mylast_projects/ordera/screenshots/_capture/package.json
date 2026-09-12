@@ -1,0 +1,9 @@
+{
+  "name": "ordera-screenshot-capture",
+  "private": true,
+  "type": "module",
+  "description": "Throwaway tooling that captures full-page portfolio screenshots of the Ordera web app in mock mode.",
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
